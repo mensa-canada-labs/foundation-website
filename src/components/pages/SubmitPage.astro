@@ -1,0 +1,462 @@
+---
+import { AlertTriangle, BookOpen, CheckCircle, Clock, FileText, GraduationCap, Send, User } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'Soumettre votre dissertation',
+        description:
+          'Remplissez le formulaire du Programme de bourses Mensa Canada pour soumettre votre dissertation de 250 mots avant le 31 janvier 2026.',
+        heroTitle: 'Soumettre votre dissertation',
+        heroSubtitle: 'Remplissez le formulaire ci-dessous pour transmettre votre candidature',
+        bannerIntro: 'Avant de soumettre :',
+        bannerBody:
+          'lisez attentivement les règlements. Seules les dissertations envoyées par ce formulaire sont acceptées. Les fichiers PDF, les télécopies et les envois postaux seront disqualifiés.',
+        deadlineLabel: 'Date limite : 31 janvier 2026.',
+        personalInfo: 'Renseignements personnels',
+        personalInfoHelp: 'Ces renseignements ne seront pas communiqués aux juges.',
+        academicInfo: 'Renseignements académiques',
+        essayTitle: 'Votre dissertation',
+        essayHelp:
+          'Décrivez vos objectifs de carrière en 250 mots ou moins. N’incluez pas votre nom ni d’information permettant de vous identifier dans le texte.',
+        agreementTitle: 'Attestations',
+        submitLabel: 'Soumettre la candidature',
+        successTitle: 'Candidature envoyée',
+        successBody:
+          'Un courriel de confirmation sera envoyé à l’adresse fournie. Seuls les finalistes seront contactés par la suite.',
+        firstName: 'Prénom',
+        lastName: 'Nom',
+        email: 'Adresse courriel',
+        phone: 'Numéro de téléphone',
+        dateOfBirth: 'Date de naissance',
+        birthHelp: 'Vous devez avoir au moins 18 ans le 31 janvier 2026.',
+        institution: 'Établissement postsecondaire',
+        program: 'Programme d’études',
+        yearOfStudy: 'Année ou niveau d’études',
+        status: 'Statut d’inscription',
+        citizenship: 'Statut de citoyenneté',
+        essayLanguage: 'Langue de la dissertation',
+        essayText: 'Texte de la dissertation',
+        placeholders: {
+          firstName: 'Entrez votre prénom',
+          lastName: 'Entrez votre nom',
+          email: 'vous@exemple.ca',
+          phone: '(555) 123-4567',
+          institution: 'ex. Université de Montréal',
+          program: 'ex. Informatique',
+          essay:
+            'Collez ou rédigez votre dissertation ici. Décrivez vos objectifs de carrière, vos réalisations et les étapes prévues. N’incluez pas votre nom ni d’information permettant de vous identifier.',
+        },
+        yearOptions: [
+          { value: '', label: 'Sélectionnez une année' },
+          { value: '1', label: '1re année' },
+          { value: '2', label: '2e année' },
+          { value: '3', label: '3e année' },
+          { value: '4', label: '4e année' },
+          { value: '5', label: '5e année et plus' },
+          { value: 'masters', label: 'Maîtrise' },
+          { value: 'phd', label: 'Doctorat' },
+          { value: 'postdoc', label: 'Postdoctorat' },
+        ],
+        statuses: {
+          fulltime: 'Temps plein',
+          coop: 'Coopératif ou stage crédité',
+        },
+        citizenshipOptions: {
+          citizen: 'Citoyen canadien',
+          pr: 'Immigrant reçu ou résident permanent',
+        },
+        essayLanguages: {
+          english: 'Anglais',
+          french: 'Français',
+        },
+        checkboxes: [
+          'J’atteste que cette dissertation est entièrement mon œuvre et que tous les renseignements fournis sont exacts. Je consens à fournir une preuve d’inscription et toute documentation supplémentaire si je suis retenu comme finaliste.',
+          'J’autorise le Programme de bourses Mensa Canada à utiliser mon nom et ma photo à des fins de promotion si je suis choisi comme gagnant.',
+        ],
+        checklistTitle: 'Liste de vérification',
+        checklist: [
+          'J’ai lu attentivement les règlements',
+          'Ma dissertation compte 250 mots ou moins',
+          'Aucune information permettant de m’identifier ne figure dans la dissertation',
+          'Mon programme d’études et mon année sont indiqués',
+          'J’explique mes objectifs de carrière et les démarches déjà entreprises',
+          'J’ai fourni au moins deux moyens de me joindre',
+          'Je n’ai soumis qu’une seule candidature',
+        ],
+        deadlineTitle: 'Date limite',
+        deadlineBody: 'Les candidatures doivent être soumises au plus tard le 31 janvier 2026 à minuit dans votre fuseau horaire.',
+        helpTitle: 'Besoin d’aide ?',
+        helpBody: 'Consultez notre FAQ ou écrivez-nous pour obtenir de l’aide.',
+        helpFaq: 'Voir la FAQ',
+        helpEmail: 'Nous écrire',
+        wordCountTemplate: '{count} / 250 mots',
+        wordLimitMessage: 'Votre dissertation dépasse 250 mots. Veuillez la raccourcir avant de soumettre votre candidature.',
+      }
+    : {
+        title: 'Submit Your Essay',
+        description:
+          'Complete the Mensa Canada Scholarship Programme submission form and send your 250-word essay before January 31, 2026.',
+        heroTitle: 'Submit Your Essay',
+        heroSubtitle: 'Complete the form below to submit your scholarship application',
+        bannerIntro: 'Before you submit:',
+        bannerBody:
+          'read the rules carefully. Only essays sent through this form are accepted. PDF files, faxes, and essays sent by mail will be disqualified.',
+        deadlineLabel: 'Deadline: January 31, 2026.',
+        personalInfo: 'Personal Information',
+        personalInfoHelp: 'This information will not be shared with the judges.',
+        academicInfo: 'Academic Information',
+        essayTitle: 'Your Essay',
+        essayHelp:
+          'Describe your career goals in 250 words or less. Do not include your name or identifying information in the essay text.',
+        agreementTitle: 'Agreements',
+        submitLabel: 'Submit Application',
+        successTitle: 'Application Submitted',
+        successBody:
+          'A confirmation email will be sent to the address you provided. Only finalists will be contacted after that.',
+        firstName: 'First Name',
+        lastName: 'Last Name',
+        email: 'Email Address',
+        phone: 'Phone Number',
+        dateOfBirth: 'Date of Birth',
+        birthHelp: 'You must be at least 18 years old on January 31, 2026.',
+        institution: 'Post-Secondary Institution',
+        program: 'Program / Course of Study',
+        yearOfStudy: 'Year / Level of Study',
+        status: 'Enrolment Status',
+        citizenship: 'Citizenship Status',
+        essayLanguage: 'Essay Language',
+        essayText: 'Essay Text',
+        placeholders: {
+          firstName: 'Enter your first name',
+          lastName: 'Enter your last name',
+          email: 'you@example.com',
+          phone: '(555) 123-4567',
+          institution: 'e.g., University of Toronto',
+          program: 'e.g., Computer Science',
+          essay:
+            'Paste or type your essay here. Describe your career goals, accomplishments, and plans. Do not include your name or identifying information.',
+        },
+        yearOptions: [
+          { value: '', label: 'Select year' },
+          { value: '1', label: '1st Year' },
+          { value: '2', label: '2nd Year' },
+          { value: '3', label: '3rd Year' },
+          { value: '4', label: '4th Year' },
+          { value: '5', label: '5th Year+' },
+          { value: 'masters', label: 'Master’s' },
+          { value: 'phd', label: 'PhD / Doctoral' },
+          { value: 'postdoc', label: 'Post-Doctoral' },
+        ],
+        statuses: {
+          fulltime: 'Full-time',
+          coop: 'Co-op with academic credit',
+        },
+        citizenshipOptions: {
+          citizen: 'Canadian Citizen',
+          pr: 'Landed Immigrant / Permanent Resident',
+        },
+        essayLanguages: {
+          english: 'English',
+          french: 'Français',
+        },
+        checkboxes: [
+          'I certify that this essay is entirely my own work and that all information provided is truthful. I agree to provide proof of enrolment and any additional documentation if selected as a finalist.',
+          'I consent to the Mensa Canada Scholarship Programme using my name and photograph for publicity purposes if selected as a winner.',
+        ],
+        checklistTitle: 'Submission Checklist',
+        checklist: [
+          'I have read the rules carefully',
+          'My essay is 250 words or less',
+          'The essay contains no identifying information',
+          'My program of study and year are included',
+          'I explain my career goals and the steps I have taken',
+          'I have provided at least two contact methods',
+          'I have submitted only one application',
+        ],
+        deadlineTitle: 'Deadline',
+        deadlineBody: 'Applications must be submitted by January 31, 2026 at midnight in your time zone.',
+        helpTitle: 'Need Help?',
+        helpBody: 'Check the FAQ or email us if you need assistance.',
+        helpFaq: 'View FAQ',
+        helpEmail: 'Email us',
+        wordCountTemplate: '{count} / 250 words',
+        wordLimitMessage: 'Your essay exceeds 250 words. Please shorten it before submitting.',
+      };
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="submit">
+  <section class="page-hero">
+    <div class="page-container relative text-center">
+      <h1 class="page-hero-title">{copy.heroTitle}</h1>
+      <p class="page-hero-subtitle">{copy.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <section class="bg-surface pt-6 pb-section">
+    <div class="page-container">
+      <div class="outlined-panel-muted mx-auto mb-8 flex max-w-6xl items-start gap-3 px-5 py-4 md:px-6">
+        <AlertTriangle class="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+        <div class="text-sm leading-relaxed text-text-primary">
+          <strong>{copy.bannerIntro}</strong> {copy.bannerBody} <strong>{copy.deadlineLabel}</strong>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_320px] max-w-6xl mx-auto">
+        <div class="outlined-panel p-6 md:p-8 lg:p-10">
+          <form
+            id="scholarship-form"
+            class="space-y-0"
+            data-word-count-template={copy.wordCountTemplate}
+            data-word-limit-message={copy.wordLimitMessage}
+          >
+            <fieldset class="space-y-6 first:border-t-0 first:pt-0">
+              <legend class="font-heading text-2xl font-bold text-secondary mb-2 flex items-center gap-3">
+                <User class="w-6 h-6 text-primary" />
+                {copy.personalInfo}
+              </legend>
+              <p class="text-text-muted text-sm mb-4">{copy.personalInfoHelp}</p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="firstName" class="block text-sm font-semibold text-text-primary mb-2">{copy.firstName} <span class="text-primary">*</span></label>
+                  <input type="text" id="firstName" name="firstName" required class="form-control" placeholder={copy.placeholders.firstName} />
+                </div>
+                <div>
+                  <label for="lastName" class="block text-sm font-semibold text-text-primary mb-2">{copy.lastName} <span class="text-primary">*</span></label>
+                  <input type="text" id="lastName" name="lastName" required class="form-control" placeholder={copy.placeholders.lastName} />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="email" class="block text-sm font-semibold text-text-primary mb-2">{copy.email} <span class="text-primary">*</span></label>
+                  <input type="email" id="email" name="email" required class="form-control" placeholder={copy.placeholders.email} />
+                </div>
+                <div>
+                  <label for="phone" class="block text-sm font-semibold text-text-primary mb-2">{copy.phone} <span class="text-primary">*</span></label>
+                  <input type="tel" id="phone" name="phone" required class="form-control" placeholder={copy.placeholders.phone} />
+                </div>
+              </div>
+
+              <div>
+                <label for="dateOfBirth" class="block text-sm font-semibold text-text-primary mb-2">{copy.dateOfBirth} <span class="text-primary">*</span></label>
+                <input type="date" id="dateOfBirth" name="dateOfBirth" required class="form-control" />
+                <p class="text-xs text-text-muted mt-1">{copy.birthHelp}</p>
+              </div>
+            </fieldset>
+
+            <fieldset class="space-y-6 border-t border-border/60 pt-8 mt-8">
+              <legend class="font-heading text-2xl font-bold text-secondary mb-2 flex items-center gap-3">
+                <GraduationCap class="w-6 h-6 text-primary" />
+                {copy.academicInfo}
+              </legend>
+
+              <div>
+                <label for="institution" class="block text-sm font-semibold text-text-primary mb-2">{copy.institution} <span class="text-primary">*</span></label>
+                <input type="text" id="institution" name="institution" required class="form-control" placeholder={copy.placeholders.institution} />
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="program" class="block text-sm font-semibold text-text-primary mb-2">{copy.program} <span class="text-primary">*</span></label>
+                  <input type="text" id="program" name="program" required class="form-control" placeholder={copy.placeholders.program} />
+                </div>
+                <div>
+                  <label for="yearOfStudy" class="block text-sm font-semibold text-text-primary mb-2">{copy.yearOfStudy} <span class="text-primary">*</span></label>
+                  <select id="yearOfStudy" name="yearOfStudy" required class="form-control">
+                    {copy.yearOptions.map((option) => (
+                      <option value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-text-primary mb-2">{copy.status} <span class="text-primary">*</span></label>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <label class="choice-panel cursor-pointer">
+                    <input type="radio" name="status" value="fulltime" required class="w-4 h-4 text-primary accent-primary" />
+                    <span class="text-text-secondary">{copy.statuses.fulltime}</span>
+                  </label>
+                  <label class="choice-panel cursor-pointer">
+                    <input type="radio" name="status" value="coop" class="w-4 h-4 text-primary accent-primary" />
+                    <span class="text-text-secondary">{copy.statuses.coop}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-text-primary mb-2">{copy.citizenship} <span class="text-primary">*</span></label>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <label class="choice-panel cursor-pointer">
+                    <input type="radio" name="citizenship" value="citizen" required class="w-4 h-4 accent-primary" />
+                    <span class="text-text-secondary">{copy.citizenshipOptions.citizen}</span>
+                  </label>
+                  <label class="choice-panel cursor-pointer">
+                    <input type="radio" name="citizenship" value="pr" class="w-4 h-4 accent-primary" />
+                    <span class="text-text-secondary">{copy.citizenshipOptions.pr}</span>
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="space-y-6 border-t border-border/60 pt-8 mt-8">
+              <legend class="font-heading text-2xl font-bold text-secondary mb-2 flex items-center gap-3">
+                <BookOpen class="w-6 h-6 text-primary" />
+                {copy.essayTitle}
+              </legend>
+              <p class="text-text-muted text-sm">{copy.essayHelp}</p>
+
+              <div>
+                <label class="block text-sm font-semibold text-text-primary mb-2">{copy.essayLanguage} <span class="text-primary">*</span></label>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <label class="choice-panel cursor-pointer">
+                    <input type="radio" name="essayLanguage" value="english" required class="w-4 h-4 accent-primary" />
+                    <span class="text-text-secondary">{copy.essayLanguages.english}</span>
+                  </label>
+                  <label class="choice-panel cursor-pointer">
+                    <input type="radio" name="essayLanguage" value="french" class="w-4 h-4 accent-primary" />
+                    <span class="text-text-secondary">{copy.essayLanguages.french}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <label for="essay" class="block text-sm font-semibold text-text-primary">{copy.essayText} <span class="text-primary">*</span></label>
+                  <span id="wordCount" class="rounded-full border border-border/65 bg-surface-cool/70 px-3 py-1 text-sm text-text-muted">{copy.wordCountTemplate.replace('{count}', '0')}</span>
+                </div>
+                <textarea
+                  id="essay"
+                  name="essay"
+                  required
+                  rows="12"
+                  class="form-textarea"
+                  placeholder={copy.placeholders.essay}
+                ></textarea>
+              </div>
+            </fieldset>
+
+            <fieldset class="space-y-4 border-t border-border/60 pt-8 mt-8">
+              <legend class="font-heading text-2xl font-bold text-secondary mb-2 flex items-center gap-3">
+                <CheckCircle class="w-6 h-6 text-primary" />
+                {copy.agreementTitle}
+              </legend>
+              {copy.checkboxes.map((text) => (
+                <label class="choice-panel items-start cursor-pointer">
+                  <input type="checkbox" required class="mt-0.5 h-5 w-5 rounded accent-primary" />
+                  <span class="text-sm text-text-secondary leading-relaxed">{text} <span class="text-primary">*</span></span>
+                </label>
+              ))}
+            </fieldset>
+
+            <div class="border-t border-border/60 pt-8 mt-8">
+              <button type="submit" class="btn-primary w-full md:w-auto text-lg">
+                <Send class="w-5 h-5 mr-2" />
+                {copy.submitLabel}
+              </button>
+            </div>
+          </form>
+
+          <div id="success-message" class="hidden mt-8 rounded-[0.95rem] border border-primary/20 bg-primary/6 px-8 py-8 text-center">
+            <CheckCircle class="w-12 h-12 text-primary mx-auto mb-4" />
+            <h3 class="font-heading text-2xl font-bold text-secondary mb-2">{copy.successTitle}</h3>
+            <p class="text-text-secondary">{copy.successBody}</p>
+          </div>
+        </div>
+
+        <aside class="space-y-6">
+          <div class="sticky top-28 space-y-5">
+            <div class="outlined-panel-muted p-6">
+              <h3 class="font-heading text-lg font-bold text-secondary mb-4 flex items-center gap-2">
+                <FileText class="w-5 h-5 text-primary" />
+                {copy.checklistTitle}
+              </h3>
+              <ul>
+                {copy.checklist.map((item) => (
+                  <li class="flex items-start gap-2 border-t border-border/45 py-3 text-sm text-text-secondary first:border-t-0 first:pt-0 last:pb-0">
+                    <CheckCircle class="w-4 h-4 text-primary/50 mt-0.5 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="content-card-dark p-6">
+              <div class="flex items-center gap-2 mb-2">
+                <Clock class="w-5 h-5 text-accent" />
+                <h3 class="font-heading text-lg font-bold text-accent">{copy.deadlineTitle}</h3>
+              </div>
+              <p class="text-sm text-text-inverse/74">{copy.deadlineBody}</p>
+            </div>
+
+            <div class="outlined-panel p-6">
+              <h3 class="font-heading text-lg font-bold text-secondary mb-2">{copy.helpTitle}</h3>
+              <p class="text-sm text-text-muted mb-4">{copy.helpBody}</p>
+              <div class="space-y-2">
+                <a href={getLocalizedPath(locale, 'faq')} class="editorial-link text-xs tracking-[0.14em]">{copy.helpFaq}</a>
+                <a href="mailto:question@mensacanada.ca" class="editorial-link text-xs tracking-[0.14em]">{copy.helpEmail}</a>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const essay = document.getElementById('essay');
+  const wordCount = document.getElementById('wordCount');
+  const form = document.getElementById('scholarship-form');
+  const successMessage = document.getElementById('success-message');
+
+  if (essay instanceof HTMLTextAreaElement && wordCount instanceof HTMLElement) {
+    const template = form instanceof HTMLFormElement
+      ? form.dataset.wordCountTemplate ?? '{count} / 250 words'
+      : '{count} / 250 words';
+
+    essay.addEventListener('input', () => {
+      const words = essay.value.trim().split(/\s+/).filter((word) => word.length > 0);
+      const count = words.length;
+      wordCount.textContent = template.replace('{count}', String(count));
+      wordCount.className = count > 250 ? 'text-sm text-primary font-bold' : 'text-sm text-text-muted';
+    });
+  }
+
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const essayField = document.getElementById('essay');
+      const limitMessage = form.dataset.wordLimitMessage ?? 'Your essay exceeds 250 words.';
+
+      if (essayField instanceof HTMLTextAreaElement) {
+        const words = essayField.value.trim().split(/\s+/).filter((word) => word.length > 0);
+
+        if (words.length > 250) {
+          alert(limitMessage);
+          return;
+        }
+      }
+
+      form.style.display = 'none';
+
+      if (successMessage instanceof HTMLElement) {
+        successMessage.classList.remove('hidden');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+</script>

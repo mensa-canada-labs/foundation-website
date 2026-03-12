@@ -1,0 +1,116 @@
+---
+import { AlertTriangle, ArrowLeft, ArrowRight, DollarSign } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'Bourse commémorative Frank et Betty Woodhams',
+        description:
+          'Découvrez la bourse commémorative Frank et Betty Woodhams, destinée aux étudiants inscrits en mathématiques ou en informatique.',
+        back: 'Retour aux bourses',
+        heroTitle: 'La bourse commémorative Frank et Betty Woodhams',
+        heroSubtitle: 'Environ 2 500 $ par année depuis 2008',
+        sectionTitle: 'Un partenariat au service de l’éducation',
+        sectionSubtitle: 'En hommage à vingt ans d’engagement de Frank Woodhams envers Mensa Canada',
+        paragraphs: [
+          'Frank Woodhams était membre de Mensa Canada depuis de nombreuses années et très actif dans la section de Kitchener-Waterloo. Avant son décès en 2001, il a légué un fonds destiné au Programme de bourses Mensa Canada afin d’aider de jeunes étudiants prometteurs à poursuivre leurs rêves et leurs objectifs éducatifs.',
+          'La bourse commémorative Frank et Betty Woodhams rend hommage à l’engagement de Frank Woodhams envers Mensa Canada et souligne également un partenariat de vie qui a permis à deux personnes aux moyens modestes d’aider des étudiants dans les domaines qu’il affectionnait particulièrement : les mathématiques et l’informatique.',
+          'Cette bourse a une durée de vie projetée de 50 ans à partir de 2008. Son montant varie d’une année à l’autre selon le rendement des placements, avec une moyenne annuelle d’environ 2 500 $.',
+        ],
+        eligibilityTitle: 'Admissibilité particulière',
+        eligibilityBodyA:
+          'Pour être admissibles, les candidats doivent être citoyens canadiens ou immigrants reçus inscrits à temps plein dans un programme de mathématiques ou d’informatique, en plus de satisfaire à tous les critères généraux du programme.',
+        eligibilityBodyB:
+          'Il n’existe pas de demande distincte pour cette bourse. Toutes les dissertations admissibles soumises par des étudiants des programmes visés sont automatiquement considérées.',
+        closing:
+          'Un candidat inscrit en mathématiques ou en informatique est admissible à la bourse Woodhams ainsi qu’aux autres bourses Mensa Canada. Un candidat inscrit dans un autre domaine demeure admissible au concours général, mais non à cette bourse particulière.',
+        primary: 'Soumettre maintenant',
+        secondary: 'Voir les règlements',
+      }
+    : {
+        title: 'Frank & Betty Woodhams Memorial Scholarship',
+        description:
+          'Learn about the Frank & Betty Woodhams Memorial Scholarship for students enrolled in Mathematics or Computer Science.',
+        back: 'Back to Scholarships',
+        heroTitle: 'The Frank & Betty Woodhams Memorial Scholarship',
+        heroSubtitle: '~$2,500 annual award since 2008',
+        sectionTitle: 'A Partnership for Education',
+        sectionSubtitle: 'Honouring Frank Woodhams’ twenty years of dedication to Mensa Canada',
+        paragraphs: [
+          'Frank Woodhams was a long-time Mensa Canada member who was especially active in the Kitchener-Waterloo chapter. Before his passing in 2001, he bequeathed a trust fund to the Mensa Canada Scholarship Programme to help promising students pursue their dreams and educational goals.',
+          'The Frank & Betty Woodhams Memorial Scholarship honours Frank Woodhams’ commitment to Mensa Canada and also recognizes a life partnership that enabled two people of modest means to support students in the fields he loved most: mathematics and computer science.',
+          'The scholarship has a projected lifespan of 50 years beginning in 2008. Its value varies from year to year based on investment returns, with an average annual award of approximately $2,500.',
+        ],
+        eligibilityTitle: 'Specific Eligibility',
+        eligibilityBodyA:
+          'To be eligible, applicants must be Canadian citizens or landed immigrants enrolled full-time in a Mathematics or Computer Science programme, in addition to meeting all general programme criteria.',
+        eligibilityBodyB:
+          'There is no separate application process for this scholarship. All eligible essays submitted by students in qualifying programmes are considered automatically.',
+        closing:
+          'A student enrolled in Mathematics or Computer Science is eligible for the Woodhams scholarship as well as the other Mensa Canada scholarships. Applicants in other fields remain eligible for the general competition, but not for this specific award.',
+        primary: 'Apply Now',
+        secondary: 'View Full Rules',
+      };
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="woodhams" activeNavKey="scholarships">
+  <section class="page-hero">
+    <div class="page-container relative">
+      <a href={getLocalizedPath(locale, 'scholarships')} class="mb-6 inline-flex items-center text-sm text-text-inverse/60 transition-colors hover:text-text-inverse">
+        <ArrowLeft class="w-4 h-4 mr-1" /> {copy.back}
+      </a>
+      <h1 class="page-hero-title max-w-4xl">{copy.heroTitle}</h1>
+      <p class="page-hero-subtitle mx-0 max-w-2xl">{copy.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="max-w-3xl mx-auto space-y-8">
+        <div class="border-b border-border/70 pb-6">
+          <div class="mb-6 flex items-center gap-4">
+            <div class="flex h-16 w-16 items-center justify-center rounded-[1.25rem] bg-accent/10">
+              <DollarSign class="w-8 h-8 text-accent" />
+            </div>
+            <div>
+              <h2 class="font-heading text-2xl font-bold text-secondary">{copy.sectionTitle}</h2>
+              <p class="text-text-muted">{copy.sectionSubtitle}</p>
+            </div>
+          </div>
+
+          <div class="space-y-6 text-text-secondary leading-relaxed">
+            {copy.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+            <p>{copy.closing}</p>
+          </div>
+        </div>
+
+        <div class="outlined-panel-muted p-6">
+          <div class="flex items-start gap-3 mb-3">
+            <AlertTriangle class="w-5 h-5 text-accent mt-0.5 shrink-0" />
+            <h3 class="font-heading text-xl font-bold text-secondary">{copy.eligibilityTitle}</h3>
+          </div>
+          <p class="mb-3 text-text-secondary leading-relaxed">{copy.eligibilityBodyA}</p>
+          <p class="text-text-secondary leading-relaxed">{copy.eligibilityBodyB}</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-12">
+          <a href={getLocalizedPath(locale, 'submit')} class="btn-primary">
+            {copy.primary} <ArrowRight class="w-5 h-5 ml-2" />
+          </a>
+          <a href={getLocalizedPath(locale, 'rules')} class="btn-secondary">{copy.secondary}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

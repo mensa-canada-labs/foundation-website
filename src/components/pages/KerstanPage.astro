@@ -1,0 +1,103 @@
+---
+import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'Bourse commémorative Edgar Kerstan',
+        description:
+          'Découvrez l’histoire de la bourse commémorative Edgar Kerstan et la façon dont les finalistes du concours général peuvent y être considérés.',
+        back: 'Retour aux bourses',
+        heroTitle: 'La bourse commémorative Edgar Kerstan',
+        heroSubtitle: 'Bourse annuelle de 1 500 $ depuis 2011',
+        sectionTitle: 'Hommage à un héritage de savoir',
+        sectionSubtitle: 'En mémoire d’Edgar Kerstan (1951-2009)',
+        paragraphs: [
+          'Edgar Kerstan a été membre actif de Mensa Canada dans la section de Toronto. Né en Allemagne en 1951, il a immigré au Canada avec sa famille en 1956. Il a étudié en génie électrique à l’Université de Toronto, où il a obtenu son diplôme en 1974.',
+          'Edgar était une personne discrète et modeste, mais possédait des connaissances remarquablement profondes. Il appréciait les discussions techniques complexes, pouvait converser intelligemment sur presque tous les sujets et faisait preuve d’une grande patience lorsqu’il aidait les autres à comprendre des notions difficiles.',
+          'À son décès en 2009, il a légué un don important au Programme de bourses Mensa Canada. En reconnaissance de son engagement envers Mensa Canada, une bourse a été créée en son nom.',
+        ],
+        qualifyTitle: 'Comment se qualifier',
+        qualifyBody:
+          'La bourse commémorative Edgar Kerstan a été lancée en 2011 et offre un prix annuel de 1 500 $. Il n’existe pas de demande distincte pour cette bourse. Les personnes retenues comme finalistes du concours général sont automatiquement considérées.',
+        primary: 'Soumettre maintenant',
+        secondary: 'Voir les règlements',
+      }
+    : {
+        title: 'Edgar Kerstan Memorial Scholarship',
+        description:
+          'Learn about the Edgar Kerstan Memorial Scholarship and how finalists in the general competition are considered for this annual award.',
+        back: 'Back to Scholarships',
+        heroTitle: 'The Edgar Kerstan Memorial Scholarship',
+        heroSubtitle: '$1,500 annual award since 2011',
+        sectionTitle: 'Honouring a Legacy of Knowledge',
+        sectionSubtitle: 'In memory of Edgar Kerstan (1951-2009)',
+        paragraphs: [
+          'Edgar Kerstan was a member of Mensa Canada who was active in the Toronto chapter. Born in Germany in 1951, he immigrated to Canada with his family in 1956. He studied Electrical Engineering at the University of Toronto and graduated in 1974.',
+          'Edgar was quiet and unassuming, yet deeply knowledgeable. He enjoyed complex technical discussions, could speak intelligently on almost any topic, and was especially patient when helping others understand difficult material.',
+          'After his passing in 2009, he bequeathed a significant gift to the Mensa Canada Scholarship Programme. In honour of his commitment to Mensa Canada, a scholarship was established in his name.',
+        ],
+        qualifyTitle: 'How to Qualify',
+        qualifyBody:
+          'The Edgar Kerstan Memorial Scholarship debuted in 2011 and offers an annual award of $1,500. There is no separate application for this scholarship. Individuals selected as finalists in the general competition are automatically considered.',
+        primary: 'Apply Now',
+        secondary: 'View Full Rules',
+      };
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="kerstan" activeNavKey="scholarships">
+  <section class="page-hero">
+    <div class="page-container relative">
+      <a href={getLocalizedPath(locale, 'scholarships')} class="mb-6 inline-flex items-center text-sm text-text-inverse/60 transition-colors hover:text-text-inverse">
+        <ArrowLeft class="w-4 h-4 mr-1" /> {copy.back}
+      </a>
+      <h1 class="page-hero-title max-w-4xl">{copy.heroTitle}</h1>
+      <p class="page-hero-subtitle mx-0 max-w-2xl">{copy.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="max-w-3xl mx-auto space-y-8">
+        <div class="border-b border-border/70 pb-6">
+          <div class="mb-6 flex items-center gap-4">
+            <div class="flex h-16 w-16 items-center justify-center rounded-[1.25rem] bg-secondary/10">
+              <BookOpen class="w-8 h-8 text-secondary" />
+            </div>
+            <div>
+              <h2 class="font-heading text-2xl font-bold text-secondary">{copy.sectionTitle}</h2>
+              <p class="text-text-muted">{copy.sectionSubtitle}</p>
+            </div>
+          </div>
+
+          <div class="space-y-6 text-text-secondary leading-relaxed">
+            {copy.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+
+        <div class="outlined-panel-muted p-6">
+          <h3 class="font-heading text-xl font-bold text-secondary mb-3">{copy.qualifyTitle}</h3>
+          <p class="text-text-secondary leading-relaxed">{copy.qualifyBody}</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-12">
+          <a href={getLocalizedPath(locale, 'submit')} class="btn-primary">
+            {copy.primary} <ArrowRight class="w-5 h-5 ml-2" />
+          </a>
+          <a href={getLocalizedPath(locale, 'rules')} class="btn-secondary">{copy.secondary}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,459 @@
+---
+import { ArrowRight, Award, BookOpen, Calendar, ChevronRight, DollarSign, Heart } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getAwardLabel, winnersByYear } from '../../data/winners';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const isFrench = locale === 'fr';
+
+const copy = isFrench
+  ? {
+      title: 'Accueil',
+      description:
+        'Le Programme de bourses Mensa Canada aide les étudiants postsecondaires canadiens grâce à des bourses de 1 000 $ à 2 500 $ attribuées à partir d’une dissertation de 250 mots.',
+      heroBadge: 'Cycle annuel : candidatures du 1er septembre au 31 janvier | Résultats publiés en septembre suivant',
+      heroTitle: '250 MOTS.',
+      heroAccent: 'DE VRAIES BOURSES.',
+      heroBody:
+        'Un texte net. Un cap clair. Une vraie chance d’obtenir de 1 000 $ à 2 500 $.',
+      heroPrimary: 'Soumettre votre dossier',
+      heroSecondary: 'Voir les règlements',
+      trustItems: ['25+ ans de bourses', '100+ étudiants soutenus', 'Organisme de bienfaisance enregistré'],
+      howTitle: 'Comment ça fonctionne',
+      howSubtitle: 'Trois étapes simples pour présenter votre candidature',
+      steps: [
+        {
+          step: '01',
+          title: 'Lisez les règlements',
+          description:
+            'Vérifiez votre admissibilité : citoyen canadien ou immigrant reçu inscrit à temps plein dans un établissement postsecondaire canadien.',
+          route: 'rules' as const,
+        },
+        {
+          step: '02',
+          title: 'Rédigez votre dissertation',
+          description:
+            'Préparez un texte convaincant de 250 mots décrivant vos objectifs, vos réalisations et les étapes prévues pour les atteindre.',
+          route: 'faq' as const,
+        },
+        {
+          step: '03',
+          title: 'Soumettez en ligne',
+          description:
+            'Remplissez le formulaire avant le 31 janvier. Seules les candidatures transmises via notre formulaire sont acceptées.',
+          route: 'submit' as const,
+        },
+      ],
+      learnMore: 'En savoir plus',
+      scholarshipsTitle: 'Nos bourses',
+      scholarshipsSubtitle: 'Plusieurs prix pour soutenir des parcours d’études variés',
+      scholarships: [
+        {
+          title: 'Bourse générale Mensa Canada',
+          amount: '1 000 $',
+          description:
+            'Offerte annuellement, selon les fonds disponibles. Décrivez votre plan de carrière, vos réalisations et les moyens prévus pour atteindre vos objectifs.',
+          route: 'scholarships' as const,
+          color: 'primary',
+        },
+        {
+          title: 'Bourse commémorative Edgar Kerstan',
+          amount: '1 500 $',
+          description:
+            'Les finalistes du concours général sont automatiquement considérés pour cette bourse qui souligne l’engagement d’Edgar Kerstan.',
+          route: 'kerstan' as const,
+          color: 'secondary',
+        },
+        {
+          title: 'Bourse commémorative Frank et Betty Woodhams',
+          amount: '~2 500 $',
+          description:
+            'Réservée aux étudiants inscrits en mathématiques ou en informatique. Le montant varie selon le rendement du fonds.',
+          route: 'woodhams' as const,
+          color: 'accent',
+        },
+      ],
+      featureTitle: 'Plus de 100 boursiers soutenus',
+      featureSubtitle: 'Au service des étudiants canadiens depuis 2000',
+      winnersTitle: 'Gagnants 2025',
+      winnersSubtitle: 'Découvrez nos plus récents boursiers',
+      winnersLink: 'Voir tous les gagnants',
+      donateTitle: 'Soutenez notre mission',
+      donateBodyA:
+        'Le Programme de bourses Mensa Canada est un organisme de bienfaisance enregistré géré entièrement par des bénévoles. Les dons contribuent au financement des bourses et au soutien de la mission du programme.',
+      donateBodyB:
+        'Les dons effectués via CanaDon sont traités par cette plateforme, qui émet les reçus fiscaux et transfère ensuite les fonds au programme. Votre contribution aide les étudiants postsecondaires canadiens à atteindre leurs objectifs éducatifs.',
+      donateButton: 'Faire un don via CanaDon',
+      volunteerLabel: 'Organisme géré par des bénévoles',
+      heroImageAlt: 'Édifice universitaire historique entouré de feuillage automnal',
+      featureImageAlt: 'Diplômés lançant leurs mortiers en l’air',
+      donateImageAlt: 'Étudiante souriante en train d’étudier dans une bibliothèque',
+    }
+  : {
+      title: 'Home',
+      description:
+        'The Mensa Canada Scholarship Programme helps Canadian post-secondary students through scholarships of $1,000 to $2,500 awarded from a 250-word essay.',
+      heroBadge: 'Annual cycle: submissions from September 1 to January 31 | Results published the following September',
+      heroTitle: '250 WORDS.',
+      heroAccent: 'REAL SCHOLARSHIPS.',
+      heroBody:
+        'A sharp essay. A clear direction. A real chance at $1,000 to $2,500.',
+      heroPrimary: 'Apply Now',
+      heroSecondary: 'View Rules',
+      trustItems: ['25+ Years of Awards', '100+ Scholars Funded', 'Registered Charity'],
+      howTitle: 'How It Works',
+      howSubtitle: 'Three simple steps to apply for your scholarship',
+      steps: [
+        {
+          step: '01',
+          title: 'Review the Rules',
+          description:
+            'Confirm your eligibility: Canadian citizen or landed immigrant enrolled full-time at a Canadian post-secondary institution.',
+          route: 'rules' as const,
+        },
+        {
+          step: '02',
+          title: 'Write Your Essay',
+          description:
+            'Craft a compelling 250-word essay describing your goals, accomplishments, and the steps you plan to take next.',
+          route: 'faq' as const,
+        },
+        {
+          step: '03',
+          title: 'Submit Online',
+          description:
+            'Complete the submission form before January 31. Only entries submitted through our form are accepted.',
+          route: 'submit' as const,
+        },
+      ],
+      learnMore: 'Learn more',
+      scholarshipsTitle: 'Our Scholarships',
+      scholarshipsSubtitle: 'Multiple awards to support diverse academic paths',
+      scholarships: [
+        {
+          title: 'Mensa Canada General Scholarship',
+          amount: '$1,000',
+          description:
+            'Offered annually, as funding permits. Applicants describe their career plan, accomplishments to date, and the steps they will take to reach their goals.',
+          route: 'scholarships' as const,
+          color: 'primary',
+        },
+        {
+          title: 'Edgar Kerstan Memorial Scholarship',
+          amount: '$1,500',
+          description:
+            'Finalists in the general competition are automatically considered for this award honouring Edgar Kerstan’s legacy.',
+          route: 'kerstan' as const,
+          color: 'secondary',
+        },
+        {
+          title: 'Frank & Betty Woodhams Memorial Scholarship',
+          amount: '~$2,500',
+          description:
+            'Reserved for students enrolled in Mathematics or Computer Science. The award amount varies based on fund performance.',
+          route: 'woodhams' as const,
+          color: 'accent',
+        },
+      ],
+      featureTitle: 'Over 100 Scholars Funded',
+      featureSubtitle: 'Supporting Canadian students since 2000',
+      winnersTitle: '2025 Winners',
+      winnersSubtitle: 'Meet our most recent scholarship recipients',
+      winnersLink: 'View all winners',
+      donateTitle: 'Support Our Mission',
+      donateBodyA:
+        'The Mensa Canada Scholarship Programme is a registered charity run entirely by volunteers. Donations help fund scholarships and support the programme’s mission.',
+      donateBodyB:
+        'Donations made through Canada Helps are processed by that platform, which issues tax receipts and transfers the funds to the programme. Your contribution helps Canadian post-secondary students reach their educational goals.',
+      donateButton: 'Donate via Canada Helps',
+      volunteerLabel: 'Volunteer-run charity',
+      heroImageAlt: 'Historic university building surrounded by autumn foliage',
+      featureImageAlt: 'Graduates celebrating by tossing caps',
+      donateImageAlt: 'Smiling student studying in a library',
+    };
+
+const featuredWinners = winnersByYear[0]?.recipients ?? [];
+
+const heroSlides = [
+  'https://images.pexels.com/photos/19554793/pexels-photo-19554793.jpeg?auto=compress&cs=tinysrgb&w=1800&h=1200&fit=crop',
+  'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=80',
+  'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1800&q=80',
+];
+
+const visualCopy = isFrench
+  ? {
+      heroVisualLabel: 'PRIX MAX',
+      heroVisualValue: '2 500 $',
+      heroVisualBody: 'Un programme national de bourses fonde sur une dissertation de 250 mots.',
+      howKicker: 'Parcours',
+      scholarshipsKicker: 'Bourses',
+      featureKicker: 'Notre conviction',
+      featureBody:
+        'Nous soutenons les etudiants capables de relier ambition, clarte et action. Le programme recompense autant la vision que la constance.',
+      winnersKicker: 'Recipiendaires recents',
+      winnerCardLabel: 'Laureat',
+      donateKicker: 'Contribuer',
+      donatePanelTitle: 'Dons via CanaDon',
+      donatePanelBody: 'CanaDon traite les dons, remet les recus fiscaux et transfere les fonds au programme.',
+      heroStats: [
+        { value: '250', label: 'MOTS MAXIMUM' },
+        { value: '2 500 $', label: 'PRIX LE PLUS ELEVE' },
+        { value: 'SEPT.', label: 'GAGNANTS PUBLIES' },
+      ],
+    }
+  : {
+      heroVisualLabel: 'TOP AWARD',
+      heroVisualValue: '$2.5K',
+      heroVisualBody: 'A national scholarship programme built around one 250-word essay.',
+      howKicker: 'Process',
+      scholarshipsKicker: 'Scholarships',
+      featureKicker: 'What we believe',
+      featureBody:
+        'We support students who can connect ambition, clarity, and action. The programme rewards direction as much as achievement.',
+      winnersKicker: 'Recent recipients',
+      winnerCardLabel: 'Recipient',
+      donateKicker: 'Take part',
+      donatePanelTitle: 'Donate via Canada Helps',
+      donatePanelBody: 'Canada Helps processes donations, issues tax receipts, and transfers the funds to the programme.',
+      heroStats: [
+        { value: '250', label: 'WORD LIMIT' },
+        { value: '$2.5K', label: 'TOP AWARD' },
+        { value: 'SEPT.', label: 'WINNERS POSTED' },
+      ],
+    };
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="home">
+  <section class="relative min-h-[68svh] overflow-hidden bg-surface-dark text-text-inverse">
+    <div class="absolute inset-0">
+      {heroSlides.map((src, index) => (
+        <img
+          src={src}
+          alt=""
+          aria-hidden="true"
+          class="home-hero-slide absolute inset-0 h-full w-full object-cover object-center"
+          style={`animation-delay: ${index * 6}s;`}
+        />
+      ))}
+    </div>
+    <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,13,22,0.84)_0%,rgba(5,13,22,0.7)_34%,rgba(5,13,22,0.48)_66%,rgba(5,13,22,0.68)_100%)]"></div>
+    <div class="home-hero-atmosphere absolute inset-0"></div>
+
+    <div class="page-container relative flex min-h-[68svh] items-center py-14 md:py-16 lg:py-20">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 rounded-[0.7rem] border border-text-inverse/12 bg-text-inverse/6 px-4 py-3 font-heading text-[0.74rem] font-bold uppercase tracking-[0.1em] text-accent shadow-card backdrop-blur-sm">
+          <Calendar class="w-4 h-4" />
+          <span>{copy.heroBadge}</span>
+        </div>
+
+        <h1 class="mt-7 max-w-4xl font-heading text-5xl font-black uppercase leading-[0.84] tracking-[-0.06em] text-text-inverse sm:text-6xl lg:text-[6.1rem]">
+          {copy.heroTitle}
+          <span class="mt-2 block text-primary">{copy.heroAccent}</span>
+        </h1>
+
+        <p class="mt-5 max-w-2xl text-base font-medium leading-[1.5] text-text-inverse/76 md:text-lg lg:text-[1.08rem]">{copy.heroBody}</p>
+
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+          <a href={getLocalizedPath(locale, 'submit')} class="btn-primary">
+            {copy.heroPrimary} <ArrowRight class="w-4 h-4" />
+          </a>
+          <a href={getLocalizedPath(locale, 'rules')} class="btn-secondary !border-text-inverse/18 !bg-transparent !text-text-inverse hover:!border-text-inverse hover:!bg-text-inverse hover:!text-surface-dark">
+            {copy.heroSecondary}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative z-10 bg-surface-dark pb-8 pt-4 text-text-inverse md:pb-10 md:pt-5">
+    <div class="page-container">
+      <div class="grid gap-4 md:grid-cols-3 md:gap-5">
+        {visualCopy.heroStats.map((item) => (
+          <div class="rounded-[0.95rem] border border-text-inverse/10 bg-text-inverse/4 px-5 py-6 shadow-card backdrop-blur-sm">
+            <div class="font-heading text-4xl font-black leading-none text-accent md:text-5xl">{item.value}</div>
+            <p class="mt-3 font-heading text-[0.78rem] font-bold uppercase tracking-[0.1em] text-text-inverse/70">{item.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden bg-surface py-section">
+    <div class="home-process-atmosphere absolute inset-0"></div>
+
+    <div class="page-container relative">
+      <div class="mb-10 max-w-3xl">
+        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-accent">{visualCopy.howKicker}</p>
+        <h2 class="section-title">{copy.howTitle}</h2>
+        <p class="section-subtitle">{copy.howSubtitle}</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {copy.steps.map((item) => (
+          <a
+            href={getLocalizedPath(locale, item.route)}
+            class="group rounded-[0.95rem] border border-border bg-surface-elevated p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-card-hover"
+          >
+            <div class="flex items-center justify-between">
+              <span class="font-heading text-[0.78rem] font-bold uppercase tracking-[0.1em] text-primary">{item.step}</span>
+              <ChevronRight class="w-4 h-4 text-text-secondary/60 transition-transform duration-200 group-hover:translate-x-1" />
+            </div>
+            <h3 class="mt-6 font-heading text-[2.05rem] uppercase leading-[0.9] text-secondary">{item.title}</h3>
+            <p class="mt-4 text-sm font-medium leading-relaxed text-text-secondary">{item.description}</p>
+            <span class="mt-6 inline-flex font-heading text-[0.78rem] font-bold uppercase tracking-[0.1em] text-primary">{copy.learnMore}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface-cool">
+    <div class="page-container">
+      <div class="mb-10 max-w-3xl">
+        <p class="section-kicker">{visualCopy.scholarshipsKicker}</p>
+        <h2 class="section-title">{copy.scholarshipsTitle}</h2>
+        <p class="section-subtitle">{copy.scholarshipsSubtitle}</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {copy.scholarships.map((scholarship) => (
+          <article class="group flex h-full flex-col rounded-[1.9rem] border border-border/80 bg-surface-elevated p-8 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+            <div class="mb-8 flex items-center justify-between gap-4">
+              <div class:list={[
+                'flex h-14 w-14 items-center justify-center rounded-[1.2rem]',
+                scholarship.color === 'primary' && 'bg-primary/10',
+                scholarship.color === 'secondary' && 'bg-secondary/10',
+                scholarship.color === 'accent' && 'bg-accent/14',
+              ]}>
+                {scholarship.color === 'primary' && <Award class="w-7 h-7 text-primary" />}
+                {scholarship.color === 'secondary' && <BookOpen class="w-7 h-7 text-secondary" />}
+                {scholarship.color === 'accent' && <DollarSign class="w-7 h-7 text-accent" />}
+              </div>
+              <span class:list={[
+                'rounded-full px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.24em]',
+                scholarship.color === 'primary' && 'bg-primary/8 text-primary',
+                scholarship.color === 'secondary' && 'bg-secondary/8 text-secondary',
+                scholarship.color === 'accent' && 'bg-accent/18 text-secondary',
+              ]}>
+                {scholarship.amount}
+              </span>
+            </div>
+
+            <h3 class="font-heading text-[2rem] leading-none text-secondary">{scholarship.title}</h3>
+            <p class="mt-5 text-base leading-relaxed text-text-secondary">{scholarship.description}</p>
+
+            <a
+              href={getLocalizedPath(locale, scholarship.route)}
+              class="editorial-link mt-auto pt-8"
+            >
+              {copy.learnMore} <ChevronRight class="w-4 h-4" />
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="surface-panel relative overflow-hidden p-8 md:p-10">
+        <div class="home-feature-atmosphere absolute inset-0"></div>
+        <div class="relative grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <div>
+            <p class="section-kicker">{visualCopy.featureKicker}</p>
+            <h2 class="font-heading text-5xl leading-none text-secondary md:text-6xl">{copy.featureTitle}</h2>
+          </div>
+
+          <div>
+            <p class="text-lg leading-relaxed text-text-secondary">{copy.featureSubtitle}</p>
+            <p class="mt-4 max-w-2xl text-base leading-relaxed text-text-muted">{visualCopy.featureBody}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface-warm">
+    <div class="page-container">
+      <div class="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-3xl">
+          <p class="section-kicker">{visualCopy.winnersKicker}</p>
+          <h2 class="section-title">{copy.winnersTitle}</h2>
+          <p class="section-subtitle">{copy.winnersSubtitle}</p>
+        </div>
+
+        <a href={getLocalizedPath(locale, 'winners')} class="editorial-link">
+          {copy.winnersLink} <ChevronRight class="w-4 h-4" />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {featuredWinners.map((winner) => (
+          <article class="surface-panel p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+            <p class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-primary">{visualCopy.winnerCardLabel}</p>
+            <div class="mt-4 flex items-start gap-5">
+              <div class="flex h-14 w-14 items-center justify-center rounded-[1.25rem] bg-primary/8 text-2xl font-heading text-primary">
+                {winner.name.charAt(0)}
+              </div>
+
+              <div class="flex-1">
+                <h3 class="font-heading text-3xl leading-none text-secondary">{winner.name}</h3>
+                {winner.school && <p class="mt-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">{winner.school}</p>}
+                <p class="mt-5 text-sm leading-relaxed text-text-secondary">{getAwardLabel(locale, winner.award)}</p>
+                <div class="mt-5 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-primary">{winner.amount}</div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden bg-surface-dark py-section text-text-inverse">
+    <div class="home-donate-atmosphere absolute inset-0"></div>
+
+    <div class="page-container relative">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+        <div class="order-2 space-y-4 lg:order-1">
+          <img
+            src="https://images.pexels.com/photos/8199555/pexels-photo-8199555.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop"
+            alt={copy.donateImageAlt}
+            class="w-full rounded-[2rem] border border-text-inverse/10 object-cover shadow-hero aspect-[4/3]"
+          />
+
+          <div class="max-w-[16rem] rounded-[1.5rem] border border-text-inverse/10 bg-text-inverse/8 px-5 py-5 shadow-card backdrop-blur-sm md:ml-auto">
+            <p class="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-accent">{visualCopy.donatePanelTitle}</p>
+            <p class="mt-3 text-sm leading-relaxed text-text-inverse/74">{visualCopy.donatePanelBody}</p>
+          </div>
+        </div>
+
+        <div class="order-1 lg:order-2">
+          <p class="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-accent">{visualCopy.donateKicker}</p>
+          <h2 class="section-title !text-text-inverse">{copy.donateTitle}</h2>
+          <p class="text-lg leading-relaxed text-text-inverse/74">{copy.donateBodyA}</p>
+          <p class="mt-5 text-base leading-relaxed text-text-inverse/66">{copy.donateBodyB}</p>
+
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <a
+              href="https://www.canadahelps.org/en/charities/mensa-canada-scholarship-programme/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-accent"
+            >
+              <Heart class="w-4 h-4" /> {copy.donateButton}
+            </a>
+            <div class="rounded-full border border-text-inverse/12 px-4 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-text-inverse/60">
+              {copy.volunteerLabel}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

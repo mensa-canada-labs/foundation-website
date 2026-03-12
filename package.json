@@ -1,5 +1,5 @@
 {
-  "name": "foundation",
+  "name": "mensa-canada-foundation-website",
   "type": "module",
   "version": "0.0.1",
   "engines": {
@@ -12,6 +12,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.0.3"
+    "@tailwindcss/vite": "^4.2.1",
+    "astro": "^6.0.4",
+    "lucide-astro": "^0.556.0",
+    "tailwindcss": "^4.2.1"
   }
 }

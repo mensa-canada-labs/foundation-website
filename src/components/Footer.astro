@@ -1,0 +1,119 @@
+---
+import { Mail, MapPin, Heart, ExternalLink } from 'lucide-astro';
+import { brandLockup, footerCopy, getAssetPath, getLocalizedPath } from '../i18n/site';
+import type { Locale } from '../i18n/site';
+
+interface Props {
+  locale: Locale;
+  showCta?: boolean;
+}
+
+const { locale, showCta = false } = Astro.props;
+const copy = footerCopy[locale];
+const brand = brandLockup[locale];
+const footerVisualCopy =
+  locale === 'fr'
+    ? {
+        eyebrow: 'Soutenir les esprits brillants',
+        sinceLabel: 'Depuis 2000',
+      }
+    : {
+        eyebrow: 'Backing bright minds',
+        sinceLabel: 'Since 2000',
+      };
+---
+
+<footer class="mt-20 bg-surface-dark text-text-inverse">
+  {showCta && (
+    <div class="page-container pt-16">
+      <div class="relative overflow-hidden rounded-[2.4rem] border border-text-inverse/10 px-8 py-10 backdrop-blur-[2px] md:px-12 md:py-12">
+        <div class="footer-cta-atmosphere absolute inset-0"></div>
+        <div class="absolute -right-12 top-6 h-40 w-40 rounded-full bg-primary/25 blur-3xl"></div>
+        <div class="absolute bottom-0 left-12 h-24 w-24 rounded-full bg-accent/15 blur-2xl"></div>
+
+        <div class="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div class="max-w-2xl">
+            <p class="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-accent">{footerVisualCopy.eyebrow}</p>
+            <h2 class="font-heading text-4xl font-semibold leading-none text-text-inverse md:text-5xl">{copy.ctaTitle}</h2>
+            <p class="mt-5 max-w-2xl text-base leading-relaxed text-text-inverse/72 md:text-lg">{copy.ctaBody}</p>
+          </div>
+
+          <div class="flex flex-col gap-4 sm:flex-row">
+            <a href={getLocalizedPath(locale, 'submit')} class="btn-accent">{copy.ctaPrimary}</a>
+            <a href={getLocalizedPath(locale, 'rules')} class="btn-secondary !border-text-inverse/18 !bg-transparent !text-text-inverse hover:!border-text-inverse hover:!bg-text-inverse hover:!text-surface-dark">
+              {copy.ctaSecondary}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <div class="page-container py-16">
+    <div class="grid grid-cols-1 gap-12 border-b border-text-inverse/10 pb-12 lg:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]">
+      <div>
+        <a href={getLocalizedPath(locale, 'home')} class="mb-6 flex items-center gap-4">
+          <span class="brand-logo-swap h-14 w-14 sm:h-16 sm:w-16" aria-hidden="true">
+              <img src={getAssetPath('mensa_logo_color.svg')} alt="" class="brand-logo-image brand-logo-image-light" loading="lazy" decoding="async" />
+              <img src={getAssetPath('mensa_logo_bg_color.svg')} alt="" class="brand-logo-image brand-logo-image-dark" loading="lazy" decoding="async" />
+          </span>
+          <div class="min-w-0">
+            <div class="font-heading text-[1.1rem] leading-none tracking-[-0.02em] text-text-inverse whitespace-nowrap sm:text-[1.3rem] lg:text-[1.55rem]">{brand.title}</div>
+            <div class="mt-2 text-[0.6rem] font-semibold uppercase tracking-[0.28em] text-accent whitespace-nowrap sm:text-[0.66rem]">{brand.tagline}</div>
+          </div>
+        </a>
+
+        <p class="max-w-md text-sm leading-relaxed text-text-inverse/62">{copy.about}</p>
+        <div class="mt-6 inline-flex rounded-full border border-text-inverse/12 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-text-inverse/56">
+          {footerVisualCopy.sinceLabel}
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-6 text-xs font-semibold uppercase tracking-[0.24em] text-accent">{copy.quickLinksTitle}</h3>
+        <ul class="space-y-3">
+          <li><a href={getLocalizedPath(locale, 'about')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.quickLinks.about}</a></li>
+          <li><a href={getLocalizedPath(locale, 'rules')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.quickLinks.rules}</a></li>
+          <li><a href={getLocalizedPath(locale, 'faq')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.quickLinks.faq}</a></li>
+          <li><a href={getLocalizedPath(locale, 'submit')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.quickLinks.submit}</a></li>
+          <li><a href={getLocalizedPath(locale, 'winners')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.quickLinks.winners}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="mb-6 text-xs font-semibold uppercase tracking-[0.24em] text-accent">{copy.scholarshipsTitle}</h3>
+        <ul class="space-y-3">
+          <li><a href={getLocalizedPath(locale, 'scholarships')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.scholarships.scholarships}</a></li>
+          <li><a href={getLocalizedPath(locale, 'kerstan')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.scholarships.kerstan}</a></li>
+          <li><a href={getLocalizedPath(locale, 'woodhams')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.scholarships.woodhams}</a></li>
+          <li><a href={getLocalizedPath(locale, 'artSparrow')} class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.scholarships.artSparrow}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="mb-6 text-xs font-semibold uppercase tracking-[0.24em] text-accent">{copy.contactTitle}</h3>
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3">
+            <Mail class="w-4 h-4 text-accent mt-1 shrink-0" />
+            <a href="mailto:contactus@mensacanada.ca" class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">contactus@mensacanada.ca</a>
+          </li>
+          <li class="flex items-start gap-3">
+            <MapPin class="w-4 h-4 text-accent mt-1 shrink-0" />
+            <span class="text-sm text-text-inverse/62">{copy.addressLines[0]}<br />{copy.addressLines[1]}</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <ExternalLink class="w-4 h-4 text-accent mt-1 shrink-0" />
+            <a href={copy.mensaUrl} target="_blank" rel="noopener" class="text-sm text-text-inverse/62 transition-colors hover:text-text-inverse">{copy.mensaLabel}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center justify-between gap-4 pt-8 md:flex-row">
+      <p class="text-sm text-text-inverse/42">© {new Date().getFullYear()} {copy.copyright}</p>
+      <p class="flex items-center gap-1 text-sm text-text-inverse/42">
+        {copy.madeWith} <Heart class="w-3 h-3 text-accent" /> {copy.madeFor}
+      </p>
+    </div>
+  </div>
+</footer>

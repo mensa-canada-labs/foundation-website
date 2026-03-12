@@ -1,0 +1,107 @@
+---
+import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'Bourse commémorative Art Sparrow',
+        description:
+          'Découvrez l’héritage de la bourse commémorative Art Sparrow, une ancienne bourse du Programme de bourses Mensa Canada.',
+        back: 'Retour aux bourses',
+        heroTitle: 'La bourse commémorative Art Sparrow',
+        heroSubtitle:
+          'Ancienne bourse du programme, créée pour prolonger l’engagement d’Art Sparrow envers l’apprentissage continu',
+        sectionTitle: 'Mémoire d’un bienfaiteur engagé',
+        sectionSubtitle: 'En hommage à Art Sparrow, membre de Mensa depuis 1967',
+        paragraphs: [
+          'La bourse d’études commémorative Art Sparrow a été nommée à la mémoire d’un grand membre de Mensa, un homme sérieux de grande intégrité. Il avait des attentes élevées pour lui-même et pour les autres et voyait la vie comme une source perpétuelle d’apprentissage.',
+          'Il était disposé à aider les membres de Mensa qui souhaitaient accroître leurs connaissances et améliorer leur sort dans la vie par l’éducation permanente. Il les soutenait à la fois financièrement et comme mentor, et trouvait toujours le temps d’encourager, conseiller ou renseigner ses confrères.',
+          'Art recevait et exigeait le meilleur de chacun. Parmi ses nombreux intérêts figuraient les rallyes automobiles, l’escalade et le pilotage d’avions. Constructeur de profession, il était connu dans l’industrie du bâtiment de Toronto comme un estimateur hors pair. Il avait adhéré à Mensa en 1967.',
+          'Après son décès, sa famille a choisi de perpétuer sa philosophie et ses convictions en dotant une bourse Mensa à son nom. Même si cette bourse est maintenant retirée, son impact sur la vie d’étudiants canadiens demeure important.',
+        ],
+        noteTitle: 'Note historique',
+        noteBody:
+          'Cette bourse n’accepte plus de candidatures, mais elle reste une partie importante de l’histoire du programme. Elle témoigne de la générosité des familles donatrices qui ont contribué à soutenir les étudiants canadiens.',
+        primary: 'Voir les bourses actuelles',
+        secondary: 'Voir les règlements',
+      }
+    : {
+        title: 'Art Sparrow Memorial Scholarship',
+        description:
+          'Learn about the legacy of the Art Sparrow Memorial Scholarship, a retired award from the Mensa Canada Scholarship Programme.',
+        back: 'Back to Scholarships',
+        heroTitle: 'The Art Sparrow Memorial Scholarship',
+        heroSubtitle:
+          'A past award created to extend Art Sparrow’s commitment to lifelong learning and practical support for students',
+        sectionTitle: 'Remembering a dedicated benefactor',
+        sectionSubtitle: 'In honour of Art Sparrow, a Mensa member since 1967',
+        paragraphs: [
+          'The Art Sparrow Memorial Scholarship was named in memory of a prominent Mensa member and a man of great integrity. He held high expectations for himself and for others, and saw life as a source of perpetual learning.',
+          'He was always willing to help Mensa members who wanted to increase their knowledge and improve their lives through continuing education. He supported others both financially and as a mentor, and was known for finding time to encourage, advise, and inform fellow members.',
+          'Art received and expected the best from everyone. His many interests included car rallies, climbing, and piloting aircraft. A builder by profession, he was known in the Toronto construction industry as an outstanding estimator. He joined Mensa in 1967.',
+          'When Art passed away, his family chose to carry forward his philosophy and beliefs by funding a Mensa scholarship in his name. Although the scholarship is now retired, its impact on Canadian students remains worth recognizing.',
+        ],
+        noteTitle: 'Historical note',
+        noteBody:
+          'This scholarship no longer accepts applications, but it remains an important part of the programme’s history. It reflects the generosity of donor families whose gifts helped support Canadian students over time.',
+        primary: 'View current scholarships',
+        secondary: 'Read the rules',
+      };
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="artSparrow" activeNavKey="scholarships">
+  <section class="page-hero">
+    <div class="page-container relative">
+      <a href={getLocalizedPath(locale, 'scholarships')} class="mb-6 inline-flex items-center text-sm text-text-inverse/60 transition-colors hover:text-text-inverse">
+        <ArrowLeft class="w-4 h-4 mr-1" /> {copy.back}
+      </a>
+      <h1 class="page-hero-title max-w-4xl">{copy.heroTitle}</h1>
+      <p class="page-hero-subtitle mx-0 max-w-2xl">{copy.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="max-w-3xl mx-auto space-y-8">
+        <div class="border-b border-border/70 pb-6">
+          <div class="mb-6 flex items-center gap-4">
+            <div class="flex h-16 w-16 items-center justify-center rounded-[1.25rem] bg-primary/10">
+              <BookOpen class="w-8 h-8 text-primary" />
+            </div>
+            <div>
+              <h2 class="font-heading text-2xl font-bold text-secondary">{copy.sectionTitle}</h2>
+              <p class="text-text-muted">{copy.sectionSubtitle}</p>
+            </div>
+          </div>
+
+          <div class="space-y-6 text-text-secondary leading-relaxed">
+            {copy.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+
+        <div class="outlined-panel-muted p-6">
+          <h3 class="font-heading text-xl font-bold text-secondary mb-3">{copy.noteTitle}</h3>
+          <p class="text-text-secondary leading-relaxed">{copy.noteBody}</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-12">
+          <a href={getLocalizedPath(locale, 'scholarships')} class="btn-primary">
+            {copy.primary} <ArrowRight class="w-5 h-5 ml-2" />
+          </a>
+          <a href={getLocalizedPath(locale, 'rules')} class="btn-secondary">{copy.secondary}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

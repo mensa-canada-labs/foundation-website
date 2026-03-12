@@ -1,0 +1,438 @@
+---
+import { AlertTriangle, ArrowRight, Clock, Mail } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'Règlements et admissibilité',
+        description:
+          'Consultez les règlements du Programme de bourses Mensa Canada, les critères d’admissibilité et la meilleure façon de préparer votre dissertation de 250 mots.',
+        heroTitle: 'Règlements et admissibilité',
+        heroSubtitle:
+          'Une bonne candidature commence ici. L’objectif de cette page est de rendre les critères clairs avant même que vous commenciez à rédiger.',
+        banner:
+          'Important : lisez les règlements et la FAQ avant de soumettre votre candidature. Des questions ? Écrivez-nous.',
+        introKicker: 'Avant de soumettre',
+        introTitle: 'L’essentiel en un coup d’œil',
+        introBody:
+          'Chaque année, des candidatures sont écartées pour des raisons simples et évitables. Vérifiez d’abord les points ci-dessous, puis passez aux règles détaillées.',
+        essentials: [
+          {
+            value: 'CANADA',
+            label: 'Statut et établissement',
+            body: 'Être citoyen canadien ou immigrant reçu et étudier à temps plein dans un établissement postsecondaire canadien admissible.',
+          },
+          {
+            value: '18+',
+            label: 'Âge minimum',
+            body: 'Avoir au moins 18 ans au 31 janvier 2026.',
+          },
+          {
+            value: '250',
+            label: 'Mots maximum',
+            body: 'Une dissertation en français ou en anglais, concise, factuelle et sans éléments permettant de vous identifier.',
+          },
+          {
+            value: '31 JANV.',
+            label: 'Date limite',
+            body: 'Soumettre le formulaire officiel au plus tard le 31 janvier 2026, à minuit dans votre fuseau horaire.',
+          },
+        ],
+        mistakesKicker: 'À éviter',
+        mistakesTitle: 'Les causes de disqualification les plus fréquentes',
+        mistakesSubtitle:
+          'La plupart des problèmes ne viennent pas de la qualité du texte, mais du non-respect de quelques règles de base.',
+        mistakes: [
+          {
+            title: 'Statut non admissible',
+            body: 'Âge insuffisant, inscription non admissible ou établissement qui ne répond pas aux critères du programme.',
+          },
+          {
+            title: 'Soumission hors procédure',
+            body: 'Dissertation envoyée autrement que par le formulaire officiel, ou soumise après la date limite.',
+          },
+          {
+            title: 'Texte identifiable',
+            body: 'Nom, lien personnel ou détails trop précis permettant de reconnaître facilement l’auteur.',
+          },
+          {
+            title: 'Affirmations impossibles à vérifier',
+            body: 'Le programme peut valider les éléments avancés dans les dissertations finalistes. Les informations doivent donc être exactes et vérifiables.',
+          },
+        ],
+        ruleGroupsTitle: 'Règles détaillées',
+        ruleGroupsSubtitle:
+          'Une fois les bases comprises, voici le cadre complet dans lequel les candidatures sont évaluées et vérifiées.',
+        ruleGroups: [
+          {
+            title: 'Admissibilité',
+            items: [
+              'Les candidats 2025-2026 doivent être citoyens canadiens ou immigrants reçus inscrits à temps plein dans un établissement postsecondaire canadien accrédité par le ministère provincial de l’Éducation applicable durant l’année scolaire 2025-2026.',
+              'Le statut à temps plein est défini par l’établissement postsecondaire canadien que fréquente le candidat.',
+              'Les candidats doivent être âgés d’au moins 18 ans le 31 janvier 2026.',
+            ],
+          },
+          {
+            title: 'Dissertation',
+            items: [
+              'L’attribution des prix est basée sur la dissertation du candidat.',
+              'Les dissertations peuvent être rédigées en français ou en anglais. Une seule dissertation est acceptée par candidat.',
+              'Toute affirmation contenue dans la dissertation peut être vérifiée, notamment les brevets, publications, résultats scolaires ou interventions médicales.',
+              'La décision des juges est finale.',
+            ],
+          },
+          {
+            title: 'Finalistes et vérifications',
+            items: [
+              'Seuls les finalistes seront contactés.',
+              'Ils devront fournir une preuve officielle d’inscription et signer une attestation confirmant que la dissertation est entièrement leur œuvre.',
+              'Ils pourront devoir fournir une preuve de citoyenneté ou de statut d’immigrant reçu ainsi que jusqu’à deux lettres de recommandation.',
+              'Le programme comprend une ou plusieurs bourses de 1 000 $ et peut inclure des mentions honorables, attribuées à la discrétion du conseil d’administration selon les fonds disponibles.',
+            ],
+          },
+        ],
+        applyKicker: 'Préparation',
+        applyTitle: 'Comment préparer une candidature solide',
+        applySubtitle:
+          'Le texte doit être court, mais il ne doit pas être vague. Le plus efficace est de montrer une direction claire et des démarches déjà engagées.',
+        applySteps: [
+          {
+            step: '01',
+            title: 'Présentez votre objectif',
+            body: 'Rédigez une dissertation de 250 mots ou moins qui décrit clairement vos objectifs académiques, professionnels ou vocationnels.',
+          },
+          {
+            step: '02',
+            title: 'Situez votre parcours',
+            body: 'Indiquez votre programme, votre niveau d’études et l’établissement postsecondaire canadien que vous fréquentez pendant l’année scolaire 2025-2026.',
+          },
+          {
+            step: '03',
+            title: 'Montrez les démarches déjà entreprises',
+            body: 'Décrivez les expériences, engagements, cours, fonctions, prix ou réalisations qui montrent que votre projet est déjà en mouvement.',
+          },
+          {
+            step: '04',
+            title: 'Soumettez correctement',
+            body: 'Utilisez le formulaire officiel, une seule fois, avant le 31 janvier 2026. N’incluez aucun élément permettant de vous identifier dans la dissertation.',
+          },
+        ],
+        visualImageAlt: 'Étudiante en train de rédiger des notes dans un carnet',
+        datesTitle: 'Dates importantes',
+        dates: [
+          { value: '1 septembre', label: 'Ouverture du concours pour les dissertations' },
+          { value: '31 janvier', label: 'Date limite de soumission à minuit dans votre fuseau horaire' },
+          { value: 'Septembre 2026', label: 'Annonce des gagnants sur ce site web' },
+        ],
+        footerTitle: 'Passer à l’action',
+        footerBody: 'Une fois les règles lues, la meilleure suite est de consulter la FAQ ou de préparer votre soumission.',
+        ctaPrimary: 'Soumettre votre dissertation',
+        ctaSecondary: 'Lire la FAQ',
+        contactLabel: 'Question rapide ?',
+        contactLink: 'Écrivez-nous',
+      }
+    : {
+        title: 'Rules & Eligibility',
+        description:
+          'Review the Mensa Canada Scholarship Programme rules, eligibility criteria, and the strongest way to prepare your 250-word essay application.',
+        heroTitle: 'Rules & Eligibility',
+        heroSubtitle:
+          'A strong application starts here. This page is designed to make the criteria clear before you begin writing.',
+        banner:
+          'Important: review both the rules and the FAQ before submitting. Questions? Email us.',
+        introKicker: 'Before you submit',
+        introTitle: 'The essentials at a glance',
+        introBody:
+          'Each year, applications are screened out for simple and avoidable reasons. Check the key points first, then move into the detailed rules.',
+        essentials: [
+          {
+            value: 'CANADA',
+            label: 'Status and school',
+            body: 'Be a Canadian citizen or landed immigrant and study full-time at an eligible Canadian post-secondary institution.',
+          },
+          {
+            value: '18+',
+            label: 'Minimum age',
+            body: 'Be at least 18 years old on January 31, 2026.',
+          },
+          {
+            value: '250',
+            label: 'Maximum words',
+            body: 'One concise essay in English or French that is factual and does not identify you.',
+          },
+          {
+            value: 'JAN 31',
+            label: 'Deadline',
+            body: 'Submit the official form no later than January 31, 2026, at midnight in your time zone.',
+          },
+        ],
+        mistakesKicker: 'Avoid this',
+        mistakesTitle: 'The most common disqualification triggers',
+        mistakesSubtitle:
+          'Most problems are not about writing quality. They come from missing a few core eligibility or submission rules.',
+        mistakes: [
+          {
+            title: 'Ineligible status',
+            body: 'Too young, not enrolled in a qualifying full-time programme, or not attending an eligible Canadian institution.',
+          },
+          {
+            title: 'Incorrect submission method',
+            body: 'Essay sent outside the official form, or submitted after the deadline.',
+          },
+          {
+            title: 'Identifying content in the essay',
+            body: 'Your name, personal links, or details that make the author easy to identify.',
+          },
+          {
+            title: 'Claims that cannot be verified',
+            body: 'The programme may verify statements made in finalist essays, so the information provided must be accurate and supportable.',
+          },
+        ],
+        ruleGroupsTitle: 'Detailed rules',
+        ruleGroupsSubtitle:
+          'Once the basics are clear, here is the full framework used to evaluate and verify applications.',
+        ruleGroups: [
+          {
+            title: 'Eligibility',
+            items: [
+              '2025-2026 applicants must be Canadian citizens or landed immigrants enrolled in a full-time program at a Canadian post-secondary institution accredited by the applicable provincial Ministry of Education during the 2025-2026 academic year.',
+              'Full-time is defined by the Canadian post-secondary institution that the applicant attends.',
+              'Applicants must be at least 18 years old on January 31, 2026.',
+            ],
+          },
+          {
+            title: 'Essay rules',
+            items: [
+              'Awards are based on the applicant’s essay.',
+              'Essays may be written in English or French. Only one essay is accepted per applicant.',
+              'Any claims made in the essay are subject to verification, including but not limited to patents, publications, academic standings, and medical procedures.',
+              'The decision of the judges is final.',
+            ],
+          },
+          {
+            title: 'Finalists and verification',
+            items: [
+              'Only finalists will be contacted.',
+              'Finalists must provide official proof of enrolment and sign a consent form confirming that the essay is entirely their own work.',
+              'They may also be asked to provide proof of citizenship or landed immigrant status and up to two letters of reference.',
+              'The programme includes one or more $1,000 scholarships and may include honourable mentions, awarded at the discretion of the Board of Directors as funding permits.',
+            ],
+          },
+        ],
+        applyKicker: 'Preparation',
+        applyTitle: 'How to build a strong application',
+        applySubtitle:
+          'The essay is short, but it should not be vague. The strongest entries show a clear direction and concrete steps already taken.',
+        applySteps: [
+          {
+            step: '01',
+            title: 'State your direction',
+            body: 'Write an essay of 250 words or less that clearly explains your academic, vocational, or career goals.',
+          },
+          {
+            step: '02',
+            title: 'Place yourself in context',
+            body: 'Include your programme of study, your year or level, and the Canadian post-secondary institution you are attending during the 2025-2026 academic year.',
+          },
+          {
+            step: '03',
+            title: 'Show what you have already done',
+            body: 'Describe the experience, service, courses, roles, awards, or achievements that show your plan is already in motion.',
+          },
+          {
+            step: '04',
+            title: 'Submit correctly',
+            body: 'Use the official form once, before January 31, 2026. Do not include identifying information in the essay itself.',
+          },
+        ],
+        visualImageAlt: 'Student writing notes in a notebook',
+        datesTitle: 'Important dates',
+        dates: [
+          { value: 'September 1', label: 'Competition opens for essay submissions' },
+          { value: 'January 31', label: 'Submission deadline at midnight in your time zone' },
+          { value: 'September 2026', label: 'Winners announced on this website' },
+        ],
+        footerTitle: 'Move to the next step',
+        footerBody: 'Once the rules are clear, the best next step is to review the FAQ or prepare your submission.',
+        ctaPrimary: 'Submit Your Essay',
+        ctaSecondary: 'Read the FAQ',
+        contactLabel: 'Quick question?',
+        contactLink: 'Email us',
+      };
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="rules">
+  <section class="page-hero">
+    <div class="page-container relative text-center">
+      <h1 class="page-hero-title">{copy.heroTitle}</h1>
+      <p class="page-hero-subtitle">{copy.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="mx-auto max-w-6xl">
+        <div class="mb-10 flex items-start gap-3 border-b border-border/70 pb-5">
+          <AlertTriangle class="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+          <p class="text-sm leading-relaxed text-text-primary">
+            <strong>{locale === 'fr' ? 'Important :' : 'Important:'}</strong>{' '}
+            {copy.banner}{' '}
+            <a href="mailto:question@mensacanada.ca" class="text-primary underline underline-offset-4">{copy.contactLink}</a>
+          </p>
+        </div>
+
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
+          <div class="overflow-hidden border border-border/80 shadow-card">
+            <img
+              src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1600&q=80"
+              alt={copy.visualImageAlt}
+              class="aspect-[4/5] w-full object-cover sm:aspect-[16/10] lg:aspect-[4/5]"
+            />
+          </div>
+
+          <div>
+            <p class="section-kicker">{copy.introKicker}</p>
+            <h2 class="section-title">{copy.introTitle}</h2>
+            <p class="section-subtitle">{copy.introBody}</p>
+
+            <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+              {copy.essentials.map((item) => (
+                <div class="border-t border-border/70 pt-4">
+                  <div class="font-heading text-2xl font-black leading-none text-primary">{item.value}</div>
+                  <p class="mt-3 font-heading text-[0.76rem] font-bold uppercase tracking-[0.1em] text-secondary">{item.label}</p>
+                  <p class="mt-3 text-sm leading-relaxed text-text-secondary">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface-cool">
+    <div class="page-container">
+      <div class="mx-auto max-w-5xl">
+        <p class="section-kicker">{copy.mistakesKicker}</p>
+        <h2 class="section-title">{copy.mistakesTitle}</h2>
+        <p class="section-subtitle">{copy.mistakesSubtitle}</p>
+
+        <div class="mt-10 divide-y divide-border border-y border-border/70">
+          {copy.mistakes.map((item, index) => (
+            <div class="grid gap-4 py-6 md:grid-cols-[4rem_1fr] md:gap-6">
+              <div class="font-heading text-4xl font-black leading-none text-primary/85">0{index + 1}</div>
+              <div>
+                <h3 class="font-heading text-2xl leading-none text-secondary">{item.title}</h3>
+                <p class="mt-3 max-w-3xl text-base leading-relaxed text-text-secondary">{item.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="mx-auto max-w-6xl">
+        <p class="section-kicker">{copy.ruleGroupsTitle}</p>
+        <h2 class="section-title">{copy.ruleGroupsTitle}</h2>
+        <p class="section-subtitle">{copy.ruleGroupsSubtitle}</p>
+
+        <div class="mt-10 grid gap-8 lg:grid-cols-3">
+          {copy.ruleGroups.map((group) => (
+            <section class="border-t border-border/70 pt-5">
+              <h3 class="font-heading text-[1.85rem] leading-[0.92] text-secondary">{group.title}</h3>
+              <div class="mt-5 space-y-4">
+                {group.items.map((item) => (
+                  <div class="border-t border-border/55 pt-4 first:border-t-0 first:pt-0">
+                    <p class="text-base leading-relaxed text-text-secondary">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface-warm">
+    <div class="page-container">
+      <div class="mx-auto max-w-6xl grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-center">
+        <div>
+          <p class="section-kicker">{copy.applyKicker}</p>
+          <h2 class="section-title">{copy.applyTitle}</h2>
+          <p class="section-subtitle">{copy.applySubtitle}</p>
+
+          <div class="mt-10 divide-y divide-border border-y border-border/70">
+            {copy.applySteps.map((step) => (
+              <div class="grid gap-4 py-6 md:grid-cols-[4.5rem_1fr] md:gap-6">
+                <div class="font-heading text-4xl font-black leading-none text-primary">{step.step}</div>
+                <div>
+                  <h3 class="font-heading text-2xl leading-none text-secondary">{step.title}</h3>
+                  <p class="mt-3 text-base leading-relaxed text-text-secondary">{step.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="overflow-hidden border border-border/80 shadow-card">
+          <img
+            src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80"
+            alt={copy.visualImageAlt}
+            class="aspect-[4/5] w-full object-cover sm:aspect-[16/10] lg:aspect-[4/5]"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden bg-surface-dark py-section text-text-inverse">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,182,130,0.12),transparent_22%),radial-gradient(circle_at_82%_18%,rgba(194,42,55,0.18),transparent_20%)]"></div>
+    <div class="page-container relative">
+      <div class="mx-auto max-w-6xl">
+        <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+          <div>
+            <h2 class="font-heading text-4xl font-black uppercase leading-[0.9] text-text-inverse md:text-5xl">{copy.datesTitle}</h2>
+            <p class="mt-4 max-w-2xl text-base leading-relaxed text-text-inverse/72">{copy.footerBody}</p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-3">
+            {copy.dates.map((date) => (
+              <div class="border border-text-inverse/10 bg-text-inverse/4 px-5 py-6 backdrop-blur-sm">
+                <div class="font-heading text-3xl font-black leading-none text-accent">{date.value}</div>
+                <p class="mt-3 text-sm leading-relaxed text-text-inverse/72">{date.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="mt-10 flex flex-col gap-4 border-t border-text-inverse/10 pt-6 md:flex-row md:items-center md:justify-between">
+          <div class="inline-flex items-center gap-2 text-sm text-text-inverse/68">
+            <Mail class="h-4 w-4 text-accent" />
+            <span>{copy.contactLabel}</span>
+            <a href="mailto:question@mensacanada.ca" class="text-accent underline underline-offset-4">{copy.contactLink}</a>
+          </div>
+
+          <div class="flex flex-col gap-4 sm:flex-row">
+            <a href={getLocalizedPath(locale, 'submit')} class="btn-accent">{copy.ctaPrimary}</a>
+            <a href={getLocalizedPath(locale, 'faq')} class="btn-secondary !border-text-inverse/18 !bg-transparent !text-text-inverse hover:!border-text-inverse hover:!bg-text-inverse hover:!text-surface-dark">
+              {copy.ctaSecondary} <ArrowRight class="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

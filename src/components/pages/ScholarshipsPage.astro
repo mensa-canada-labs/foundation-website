@@ -1,0 +1,197 @@
+---
+import { ArrowRight, Award, BookOpen, ChevronRight, DollarSign } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'Bourses',
+        description:
+          'Découvrez la bourse générale Mensa Canada, la bourse Edgar Kerstan et la bourse Frank et Betty Woodhams.',
+        heroTitle: 'Nos bourses',
+        heroSubtitle: 'Le Programme de bourses Mensa Canada offre plusieurs prix allant de 1 000 $ à environ 2 500 $',
+        general: {
+          title: 'Bourse générale Mensa Canada',
+          amount: '1 000 $ par année',
+          paragraphs: [
+            'La bourse générale Mensa Canada est offerte annuellement, selon les fonds disponibles. Les candidats sont invités à rédiger une courte dissertation dans laquelle ils décrivent leur plan de carrière, leurs réalisations à ce jour et les moyens prévus pour atteindre leurs objectifs futurs.',
+            'Cette bourse est ouverte à tous les candidats admissibles, c’est-à-dire aux citoyens canadiens ou immigrants reçus inscrits à temps plein dans un établissement postsecondaire canadien. Il n’est pas nécessaire d’être membre de Mensa.',
+          ],
+          link: 'Voir les critères d’admissibilité',
+        },
+        kerstan: {
+          title: 'Bourse commémorative Edgar Kerstan',
+          amount: '1 500 $ par année',
+          paragraphs: [
+            'Edgar Kerstan a été un membre actif de Mensa Canada dans la section de Toronto. Né en Allemagne en 1951, il a émigré au Canada avec sa famille en 1956, a étudié en génie électrique à l’Université de Toronto et a travaillé toute sa carrière chez IBM.',
+            'Personne discrète mais d’une grande profondeur, Edgar aimait les discussions techniques complexes et faisait preuve d’une patience remarquable pour expliquer des sujets difficiles aux autres. Après son décès en 2009, il a légué un don important au programme.',
+            'Il n’existe aucune demande distincte pour cette bourse. Les finalistes du concours général sont automatiquement considérés.',
+          ],
+          link: 'Lire l’histoire d’Edgar',
+        },
+        woodhams: {
+          title: 'Bourse commémorative Frank et Betty Woodhams',
+          amount: 'Environ 2 500 $ par année',
+          paragraphs: [
+            'Frank Woodhams, membre de longue date de Mensa Canada et très actif dans la section de Kitchener-Waterloo, a légué un fonds au Programme de bourses Mensa Canada afin de soutenir les objectifs éducatifs de jeunes étudiants prometteurs.',
+            'Cette bourse a une durée projetée de 50 ans à partir de 2008. Son montant varie d’une année à l’autre selon le rendement des placements.',
+            'Pour être admissible, le candidat doit être inscrit à temps plein dans un programme de mathématiques ou d’informatique. Il n’y a pas de procédure distincte : toutes les dissertations admissibles sont considérées.',
+          ],
+          link: 'Lire l’histoire de Frank et Betty',
+        },
+        pastTitle: 'Anciennes bourses',
+        pastBody:
+          'La bourse suivante est maintenant retirée, mais nous souhaitons souligner la grande générosité de ses bienfaiteurs et l’impact durable de leur don.',
+        pastItemTitle: 'Bourse commémorative Art Sparrow',
+        pastItemBody: 'Maintenant retirée, avec gratitude pour les nombreux étudiants dont la vie a été enrichie grâce à ce fonds.',
+        pastItemLink: 'Voir l’hommage complet',
+        cta: 'Poser sa candidature',
+      }
+    : {
+        title: 'Scholarships',
+        description:
+          'Learn about the Mensa Canada General Scholarship, the Edgar Kerstan Memorial Scholarship, and the Frank & Betty Woodhams Memorial Scholarship.',
+        heroTitle: 'Our Scholarships',
+        heroSubtitle: 'The Mensa Canada Scholarship Programme offers multiple awards ranging from $1,000 to approximately $2,500',
+        general: {
+          title: 'Mensa Canada General Scholarship',
+          amount: '$1,000 annual award',
+          paragraphs: [
+            'The Mensa Canada General Scholarship is offered annually, as funding permits. Applicants write a short essay in which they describe their career plan, list accomplishments to date, and explain what they plan to do to achieve their future career goals.',
+            'This scholarship is open to all eligible applicants: Canadian citizens or landed immigrants enrolled full-time at a Canadian post-secondary institution. Mensa membership is not required.',
+          ],
+          link: 'View full eligibility details',
+        },
+        kerstan: {
+          title: 'Edgar Kerstan Memorial Scholarship',
+          amount: '$1,500 annual award',
+          paragraphs: [
+            'Edgar Kerstan was an active Mensa Canada member in Toronto. Born in Germany in 1951, he emigrated to Canada in 1956, studied Electrical Engineering at the University of Toronto, and spent his entire career at IBM.',
+            'A quiet but deeply knowledgeable person, Edgar enjoyed complex technical discussions and was patient when helping others understand difficult topics. After his passing in 2009, he bequeathed a significant gift to the programme.',
+            'There is no separate application for this award. Finalists in the general scholarship competition are automatically considered.',
+          ],
+          link: 'Read Edgar’s full story',
+        },
+        woodhams: {
+          title: 'Frank & Betty Woodhams Memorial Scholarship',
+          amount: '~$2,500 annual award',
+          paragraphs: [
+            'Frank Woodhams was a long-time Mensa Canada member who was especially active in the Kitchener-Waterloo chapter. He left a trust fund to the Mensa Canada Scholarship Programme to support the dreams and educational goals of promising students.',
+            'The scholarship has a projected lifespan of 50 years beginning in 2008. The award amount varies year to year based on investment returns.',
+            'To qualify, applicants must be enrolled full-time in a Mathematics or Computer Science programme. There is no separate application process; all eligible essays are considered.',
+          ],
+          link: 'Read Frank & Betty’s story',
+        },
+        pastTitle: 'Past Scholarships',
+        pastBody:
+          'The following scholarship has been retired, but we wish to recognize the tremendous generosity of its benefactors and the lasting impact of their gift.',
+        pastItemTitle: 'Art Sparrow Memorial Scholarship',
+        pastItemBody: 'Now retired, with gratitude for the many students whose lives were enriched through this fund.',
+        pastItemLink: 'Read the full tribute',
+        cta: 'Apply for a Scholarship',
+      };
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="scholarships">
+  <section class="page-hero">
+    <div class="page-container relative text-center">
+      <h1 class="page-hero-title">{copy.heroTitle}</h1>
+      <p class="page-hero-subtitle">{copy.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="max-w-5xl mx-auto space-y-8">
+        <div class="outlined-panel overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-card">
+          <div class="h-1.5 bg-primary"></div>
+          <div class="p-8 md:p-10">
+            <div class="flex items-start gap-6">
+              <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.25rem] bg-primary/10">
+                <Award class="w-8 h-8 text-primary" />
+              </div>
+              <div class="flex-1">
+                <h2 class="font-heading text-3xl font-bold text-secondary mb-2">{copy.general.title}</h2>
+                <div class="text-2xl font-bold text-primary font-heading mb-4">{copy.general.amount}</div>
+                {copy.general.paragraphs.map((paragraph) => (
+                  <p class="text-text-secondary leading-relaxed mb-6">{paragraph}</p>
+                ))}
+                <a href={getLocalizedPath(locale, 'rules')} class="inline-flex items-center text-primary font-medium hover:gap-2 transition-all">
+                  {copy.general.link} <ChevronRight class="w-4 h-4 ml-1" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="outlined-panel overflow-hidden transition-all duration-300 hover:border-secondary/30 hover:shadow-card">
+          <div class="h-1.5 bg-secondary"></div>
+          <div class="p-8 md:p-10">
+            <div class="flex items-start gap-6">
+              <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.25rem] bg-secondary/10">
+                <BookOpen class="w-8 h-8 text-secondary" />
+              </div>
+              <div class="flex-1">
+                <h2 class="font-heading text-3xl font-bold text-secondary mb-2">{copy.kerstan.title}</h2>
+                <div class="text-2xl font-bold text-secondary font-heading mb-4">{copy.kerstan.amount}</div>
+                {copy.kerstan.paragraphs.map((paragraph) => (
+                  <p class="text-text-secondary leading-relaxed mb-4">{paragraph}</p>
+                ))}
+                <a href={getLocalizedPath(locale, 'kerstan')} class="inline-flex items-center text-primary font-medium hover:gap-2 transition-all">
+                  {copy.kerstan.link} <ChevronRight class="w-4 h-4 ml-1" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="outlined-panel overflow-hidden transition-all duration-300 hover:border-accent/40 hover:shadow-card">
+          <div class="h-1.5 bg-accent"></div>
+          <div class="p-8 md:p-10">
+            <div class="flex items-start gap-6">
+              <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.25rem] bg-accent/10">
+                <DollarSign class="w-8 h-8 text-accent" />
+              </div>
+              <div class="flex-1">
+                <h2 class="font-heading text-3xl font-bold text-secondary mb-2">{copy.woodhams.title}</h2>
+                <div class="text-2xl font-bold text-accent font-heading mb-4">{copy.woodhams.amount}</div>
+                {copy.woodhams.paragraphs.map((paragraph) => (
+                  <p class="text-text-secondary leading-relaxed mb-4">{paragraph}</p>
+                ))}
+                <a href={getLocalizedPath(locale, 'woodhams')} class="inline-flex items-center text-primary font-medium hover:gap-2 transition-all">
+                  {copy.woodhams.link} <ChevronRight class="w-4 h-4 ml-1" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-card-muted p-8 md:p-10">
+          <h2 class="font-heading text-2xl font-bold text-secondary mb-4">{copy.pastTitle}</h2>
+          <p class="text-text-secondary leading-relaxed mb-4">{copy.pastBody}</p>
+          <a href={getLocalizedPath(locale, 'artSparrow')} class="group block outlined-panel p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card">
+            <h3 class="font-heading text-lg font-bold text-text-secondary">{copy.pastItemTitle}</h3>
+            <p class="text-text-muted text-sm">{copy.pastItemBody}</p>
+            <span class="mt-4 inline-flex items-center text-primary font-medium transition-all duration-200 group-hover:gap-2">
+              {copy.pastItemLink} <ChevronRight class="w-4 h-4 ml-1" />
+            </span>
+          </a>
+        </div>
+
+        <div class="text-center pt-4">
+          <a href={getLocalizedPath(locale, 'submit')} class="btn-primary text-lg">
+            {copy.cta} <ArrowRight class="w-5 h-5 ml-2" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

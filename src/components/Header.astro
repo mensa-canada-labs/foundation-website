@@ -1,0 +1,180 @@
+---
+import { Languages, Menu, Moon, Sun, X } from 'lucide-astro';
+import { getAlternatePath, getAlternateLocale, getAssetPath, getLocalizedPath, headerCopy, navKeys } from '../i18n/site';
+import type { Locale, NavKey, RouteKey } from '../i18n/site';
+
+interface Props {
+  locale: Locale;
+  currentRoute: RouteKey;
+  activeNavKey?: NavKey;
+}
+
+const { locale, currentRoute, activeNavKey = currentRoute as NavKey } = Astro.props;
+const copy = headerCopy[locale];
+const navLinks = navKeys.map((key) => ({
+  key,
+  href: getLocalizedPath(locale, key),
+  label: copy.nav[key],
+}));
+const languageHref = getAlternatePath(locale, currentRoute);
+const alternateLocale = getAlternateLocale(locale);
+const utilityCopy =
+  locale === 'fr'
+    ? {
+        note: 'Concours canadien de dissertation · Cloture le 31 janvier',
+        miniCta: 'Soumettre',
+      }
+    : {
+        note: 'Canadian essay scholarship · Applications close January 31',
+        miniCta: 'Apply',
+      };
+---
+
+<header class="site-header sticky top-0 z-50 border-b border-border/80 bg-surface/88 backdrop-blur-xl">
+  <div class="border-b border-border/70 bg-surface-dark">
+    <div class="page-container flex items-center justify-between gap-4 py-2.5">
+      <p class="hidden font-heading text-[0.72rem] font-bold uppercase tracking-[0.1em] text-text-inverse/62 md:block">{utilityCopy.note}</p>
+      <div class="ml-auto flex items-center gap-2 sm:gap-3">
+        <button
+          id="theme-toggle"
+          type="button"
+          data-label-dark={copy.themeSwitchToDark}
+          data-label-light={copy.themeSwitchToLight}
+          class="theme-toggle-button inline-flex items-center gap-2 rounded-[0.65rem] border px-3 py-2 font-heading text-[0.72rem] font-bold uppercase tracking-[0.1em] text-text-inverse/76 backdrop-blur-sm transition-all duration-200 hover:border-accent/50 hover:bg-text-inverse/8 hover:text-text-inverse"
+          aria-label={copy.themeSwitchToDark}
+        >
+          <Moon class="theme-toggle-next-dark h-3.5 w-3.5" />
+          <Sun class="theme-toggle-next-light h-3.5 w-3.5" />
+          <span class="theme-toggle-next-dark theme-toggle-label">{copy.themeSwitchToDark}</span>
+          <span class="theme-toggle-next-light theme-toggle-label">{copy.themeSwitchToLight}</span>
+        </button>
+        <a
+          href={languageHref}
+          hreflang={alternateLocale}
+          lang={alternateLocale}
+          class="inline-flex items-center gap-2 rounded-[0.65rem] border border-text-inverse/12 bg-text-inverse/4 px-3 py-2 font-heading text-[0.72rem] font-bold uppercase tracking-[0.1em] text-text-inverse/76 backdrop-blur-sm transition-all duration-200 hover:border-accent/50 hover:bg-text-inverse/8 hover:text-text-inverse"
+        >
+          <Languages class="w-3.5 h-3.5" /> {copy.languageSwitch}
+        </a>
+        <a href={getLocalizedPath(locale, 'submit')} class="inline-flex items-center justify-center rounded-[0.65rem] bg-text-inverse px-4 py-2 font-heading text-[0.72rem] font-bold uppercase tracking-[0.1em] text-surface-dark transition-all duration-200 hover:bg-accent hover:text-surface-dark">
+          {utilityCopy.miniCta}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <nav class="flex items-center justify-between gap-6 py-5">
+      <a href={getLocalizedPath(locale, 'home')} class="group flex min-w-0 items-center gap-3 sm:gap-4">
+        <span class="brand-logo-swap h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16" aria-hidden="true">
+            <img src={getAssetPath('mensa_logo_color.svg')} alt="" class="brand-logo-image brand-logo-image-light" loading="eager" decoding="async" />
+            <img src={getAssetPath('mensa_logo_bg_color.svg')} alt="" class="brand-logo-image brand-logo-image-dark" loading="eager" decoding="async" />
+        </span>
+        <div class="flex min-w-0 flex-col justify-center">
+          <span class="font-heading text-[0.86rem] leading-none tracking-[-0.02em] text-secondary whitespace-nowrap sm:text-[1.04rem] md:text-[1.14rem] lg:text-[1.42rem]">{copy.brandTitle}</span>
+          <span class="mt-1.5 text-[0.56rem] font-semibold uppercase tracking-[0.28em] text-primary whitespace-nowrap sm:text-[0.62rem] lg:text-[0.68rem]">{copy.brandSubtitle}</span>
+        </div>
+      </a>
+
+      <div class="hidden xl:flex items-center gap-8">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class:list={[
+              'relative pb-2 font-heading text-[0.82rem] font-bold uppercase tracking-[0.08em] transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:bg-primary after:transition-transform after:duration-200',
+              activeNavKey === link.key
+                ? 'text-secondary after:scale-x-100'
+                : 'text-text-secondary after:scale-x-0 hover:text-secondary hover:after:scale-x-100',
+            ]}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+
+      <button
+        id="mobile-toggle"
+        class="xl:hidden rounded-full border border-border bg-surface-elevated/92 p-3 text-text-secondary shadow-card transition-colors hover:text-primary cursor-pointer"
+        aria-label={copy.mobileToggle}
+      >
+        <Menu class="w-5 h-5" id="menu-open" />
+        <X class="w-5 h-5 hidden" id="menu-close" />
+      </button>
+    </nav>
+  </div>
+
+  <div id="mobile-menu" class="hidden xl:hidden border-t border-border bg-surface-elevated/92 backdrop-blur-xl">
+    <div class="page-container py-5 flex flex-col gap-2">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            'rounded-[0.8rem] border px-4 py-3 font-heading text-[0.82rem] font-bold uppercase tracking-[0.08em] transition-all duration-200',
+            activeNavKey === link.key
+              ? 'border-primary/25 bg-primary/6 text-primary'
+              : 'border-transparent text-text-secondary hover:border-border hover:bg-surface-warm hover:text-secondary',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href={languageHref}
+        hreflang={alternateLocale}
+        lang={alternateLocale}
+        class="mt-2 inline-flex items-center justify-center gap-2 rounded-[0.8rem] border border-border px-4 py-3 font-heading text-[0.82rem] font-bold uppercase tracking-[0.08em] text-text-secondary transition-all duration-200 hover:border-primary/30 hover:text-primary hover:bg-primary/5"
+      >
+        <Languages class="w-4 h-4" /> {copy.languageSwitch}
+      </a>
+      <a href={getLocalizedPath(locale, 'submit')} class="btn-primary mt-2 text-center">{copy.cta}</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const openIcon = document.getElementById('menu-open');
+  const closeIcon = document.getElementById('menu-close');
+  const themeToggle = document.getElementById('theme-toggle');
+
+  const applyTheme = (theme) => {
+    const root = document.documentElement;
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+    metaTheme?.setAttribute('content', theme === 'dark' ? '#08111c' : '#fcfaf7');
+
+    if (themeToggle instanceof HTMLButtonElement) {
+      themeToggle.setAttribute(
+        'aria-label',
+        theme === 'dark'
+          ? themeToggle.dataset.labelLight ?? 'Light mode'
+          : themeToggle.dataset.labelDark ?? 'Dark mode',
+      );
+    }
+  };
+
+  toggle?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+    openIcon?.classList.toggle('hidden');
+    closeIcon?.classList.toggle('hidden');
+  });
+
+  if (themeToggle instanceof HTMLButtonElement) {
+    applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+
+      try {
+        localStorage.setItem('mensa-theme', nextTheme);
+      } catch {
+        // Ignore storage failures and still apply the theme for this page view.
+      }
+
+      applyTheme(nextTheme);
+    });
+  }
+</script>

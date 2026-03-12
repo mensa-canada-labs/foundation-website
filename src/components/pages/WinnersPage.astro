@@ -1,0 +1,308 @@
+---
+import { ArrowRight } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getAwardLabel, winnersByYear } from '../../data/winners';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const featuredYear = winnersByYear[0];
+const featuredRecipient = featuredYear.recipients[0];
+const featuredOthers = featuredYear.recipients.slice(1);
+const recentYears = winnersByYear.slice(1, 4);
+const archiveYears = winnersByYear.slice(4);
+
+const publishedRecipients = winnersByYear.reduce((total, year) => total + year.recipients.length, 0);
+const publishedTotalAwarded = winnersByYear.reduce(
+  (total, year) =>
+    total + year.recipients.reduce((yearTotal, winner) => yearTotal + Number(winner.amount.replace(/[^0-9.]/g, '')), 0),
+  0,
+);
+const namedSchools = new Set(
+  winnersByYear.flatMap((year) => year.recipients.map((winner) => winner.school).filter((school): school is string => Boolean(school))),
+).size;
+const amountFormatter = new Intl.NumberFormat(locale === 'fr' ? 'fr-CA' : 'en-CA', {
+  style: 'currency',
+  currency: 'CAD',
+  maximumFractionDigits: 0,
+});
+const publishedTotalDisplay = amountFormatter.format(publishedTotalAwarded);
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'Gagnants',
+        description:
+          'Consultez les gagnants récents du Programme de bourses Mensa Canada et découvrez les étudiants récompensés depuis 2016.',
+        heroTitle: 'Gagnants',
+        heroSubtitle: 'Une archive plus lisible des récipiendaires récents et de la continuité du programme depuis 2000.',
+        featuredKicker: 'Dernière cohorte publiée',
+        featuredTitle: (year: string) => `Les lauréats ${year}`,
+        featuredBody:
+          'La cohorte la plus récente montre la diversité des parcours soutenus par le programme. Nous mettons ici l’année la plus récente au premier plan, puis les autres cycles publiés plus bas.',
+        featuredAwardLabel: 'Bourse la plus élevée publiée',
+        featuredAwardBody:
+          'Dans le cycle publié le plus récent, la bourse principale illustre l’ampleur du soutien possible selon les fonds disponibles cette année-là.',
+        featuredOthersLabel: 'Autres récipiendaires publiés pour cette année',
+        featuredImageAlt: 'Diplômés célébrant leur remise de diplôme',
+        statsYearsActive: 'Années de bourses depuis 2000',
+        statsRecipients: 'Gagnants publiés ici',
+        statsAmount: 'Montants publiés depuis 2016',
+        statsSchools: 'Établissements nommés',
+        recentKicker: 'Cycles récents',
+        recentTitle: 'Les années qui ont suivi',
+        recentBody:
+          'Les cycles publiés les plus récents montrent une continuité nette: mêmes exigences, mêmes standards, et des étudiants issus d’établissements variés partout au pays.',
+        recentImageAlt: 'Étudiants marchant devant un bâtiment universitaire',
+        archiveKicker: 'Archive publiée',
+        archiveTitle: 'De 2021 à 2016',
+        archiveBody:
+          'Plus bas, l’archive reste accessible sans redevenir une simple liste. Chaque année conserve ses récipiendaires, ses montants et ses bourses nommées.',
+        recipientsLabel: (count: number) => `${count} ${count > 1 ? 'récipiendaires' : 'récipiendaire'}`,
+        archiveNote:
+          'Pour les gagnants antérieurs à 2016, veuillez consulter les archives historiques du programme. Le Programme de bourses Mensa Canada attribue des bourses depuis 2000.',
+        ctaTitle: 'Prêt à apparaître ici à votre tour ?',
+        ctaBody:
+          'Les gagnants commencent tous au même endroit: une dissertation claire, concise et exacte. Vérifiez les règlements puis soumettez votre texte.',
+        ctaPrimary: 'Soumettre votre dissertation',
+        ctaSecondary: 'Voir les règlements',
+      }
+    : {
+        title: 'Past Winners',
+        description:
+          'Browse recent winners of the Mensa Canada Scholarship Programme and explore recipients from 2016 onward.',
+        heroTitle: 'Past Winners',
+        heroSubtitle: 'A clearer archive of recent recipients and the programme’s continuity since 2000.',
+        featuredKicker: 'Latest published cohort',
+        featuredTitle: (year: string) => `The ${year} recipients`,
+        featuredBody:
+          'The most recent published cohort shows the range of ambitions and institutions the programme supports. We put the latest cycle first, then keep the rest of the published archive easy to scan below.',
+        featuredAwardLabel: 'Highest published award',
+        featuredAwardBody:
+          'In the most recent published cycle, the top award gives a quick sense of the level of support that can be possible, depending on available funding that year.',
+        featuredOthersLabel: 'Other published recipients for this year',
+        featuredImageAlt: 'Graduates celebrating at convocation',
+        statsYearsActive: 'Years of awards since 2000',
+        statsRecipients: 'Published winners here',
+        statsAmount: 'Published awards since 2016',
+        statsSchools: 'Named institutions',
+        recentKicker: 'Recent cycles',
+        recentTitle: 'The years that followed',
+        recentBody:
+          'The most recent published cycles show consistent standards, recurring named awards, and recipients drawn from a wide range of institutions across Canada.',
+        recentImageAlt: 'Students walking near a university building',
+        archiveKicker: 'Published archive',
+        archiveTitle: 'From 2021 back to 2016',
+        archiveBody:
+          'Below, the archive stays readable without turning back into a plain list. Each year keeps its recipients, award amounts, and named scholarships visible.',
+        recipientsLabel: (count: number) => `${count} recipient${count > 1 ? 's' : ''}`,
+        archiveNote:
+          'For winners prior to 2016, please refer to our archives. The programme has been awarding scholarships since 2000.',
+        ctaTitle: 'Ready to see your name here next?',
+        ctaBody:
+          'Every winner starts in the same place: a clear, concise, and accurate essay. Review the rules, then prepare your submission.',
+        ctaPrimary: 'Submit Your Essay',
+        ctaSecondary: 'Review Rules',
+      };
+
+const stats = [
+  { label: copy.statsYearsActive, value: '25+' },
+  { label: copy.statsRecipients, value: String(publishedRecipients) },
+  { label: copy.statsAmount, value: publishedTotalDisplay },
+  { label: copy.statsSchools, value: String(namedSchools) },
+];
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="winners">
+  <section class="page-hero">
+    <div class="page-container relative text-center">
+      <h1 class="page-hero-title">{copy.heroTitle}</h1>
+      <p class="page-hero-subtitle">{copy.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="mx-auto max-w-6xl">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end">
+          <div class="overflow-hidden border border-border/80 shadow-card">
+            <img
+              src="https://mensa.ca/wp-content/uploads/2021/07/graduate-throw-scaled.jpg"
+              alt={copy.featuredImageAlt}
+              class="aspect-[4/5] w-full object-cover sm:aspect-[16/10] lg:aspect-[4/5]"
+            />
+          </div>
+
+          <div>
+            <p class="section-kicker">{copy.featuredKicker}</p>
+            <h2 class="section-title">{copy.featuredTitle(featuredYear.year)}</h2>
+            <p class="section-subtitle">{copy.featuredBody}</p>
+
+            <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+              {stats.map((stat) => (
+                <div class="border-t border-border/70 pt-4">
+                  <div class="font-heading text-2xl font-black leading-none text-primary md:text-3xl">{stat.value}</div>
+                  <p class="mt-3 text-sm leading-relaxed text-text-secondary">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,0.54fr)_minmax(0,0.46fr)] lg:items-start">
+          <article class="bg-surface-dark p-6 text-text-inverse shadow-card md:p-8">
+            <p class="section-kicker !bg-accent !text-surface-dark">{copy.featuredAwardLabel}</p>
+            <h3 class="mt-6 font-heading text-4xl font-black uppercase leading-[0.92] text-text-inverse md:text-5xl">
+              {featuredRecipient.name}
+            </h3>
+            <p class="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-text-inverse/68">
+              {getAwardLabel(locale, featuredRecipient.award)}
+            </p>
+            {featuredRecipient.school && <p class="mt-2 text-base text-text-inverse/78">{featuredRecipient.school}</p>}
+            <div class="mt-8 border-t border-text-inverse/14 pt-6">
+              <div class="font-heading text-5xl font-black leading-none text-accent">{featuredRecipient.amount}</div>
+              <p class="mt-4 max-w-md text-sm leading-relaxed text-text-inverse/72">{copy.featuredAwardBody}</p>
+            </div>
+          </article>
+
+          <div>
+            <p class="mb-4 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-primary">{copy.featuredOthersLabel}</p>
+            <div class="border-t border-border/70">
+              {featuredOthers.map((winner) => (
+                <article class="border-b border-border/70 py-5 last:border-b-0 last:pb-0">
+                  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h3 class="font-heading text-2xl font-black leading-[0.94] text-secondary">{winner.name}</h3>
+                      <p class="mt-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
+                        {getAwardLabel(locale, winner.award)}
+                      </p>
+                      {winner.school && <p class="mt-2 text-sm leading-relaxed text-text-secondary">{winner.school}</p>}
+                    </div>
+                    <div class="font-heading text-3xl font-black leading-none text-primary">{winner.amount}</div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface-cool py-section">
+    <div class="page-container">
+      <div class="mx-auto max-w-6xl">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
+          <div>
+            <p class="section-kicker">{copy.recentKicker}</p>
+            <h2 class="section-title">{copy.recentTitle}</h2>
+            <p class="section-subtitle">{copy.recentBody}</p>
+          </div>
+
+          <div class="overflow-hidden border border-border/80 shadow-card">
+            <img
+              src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1600&q=80"
+              alt={copy.recentImageAlt}
+              class="aspect-[16/9] w-full object-cover"
+            />
+          </div>
+        </div>
+
+        <div class="mt-10 grid gap-8 md:grid-cols-3">
+          {recentYears.map((yearData) => (
+            <section class="border-t border-border/70 pt-5">
+              <div class="flex items-end justify-between gap-3">
+                <h3 class="font-heading text-4xl font-black leading-none text-secondary">{yearData.year}</h3>
+                <p class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
+                  {copy.recipientsLabel(yearData.recipients.length)}
+                </p>
+              </div>
+
+              <div class="mt-5 space-y-4">
+                {yearData.recipients.map((winner) => (
+                  <article class="border-t border-border/55 pt-4 first:border-t-0 first:pt-0">
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <h4 class="font-heading text-xl font-black leading-[0.94] text-secondary">{winner.name}</h4>
+                        <p class="mt-2 text-sm leading-relaxed text-text-secondary">{getAwardLabel(locale, winner.award)}</p>
+                        {winner.school && <p class="mt-1 text-sm leading-relaxed text-text-muted">{winner.school}</p>}
+                      </div>
+                      <span class="shrink-0 font-heading text-2xl font-black leading-none text-primary">{winner.amount}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface py-section">
+    <div class="page-container">
+      <div class="mx-auto max-w-6xl">
+        <p class="section-kicker">{copy.archiveKicker}</p>
+        <h2 class="section-title">{copy.archiveTitle}</h2>
+        <p class="section-subtitle">{copy.archiveBody}</p>
+
+        <div class="mt-10 border-y border-border/70">
+          {archiveYears.map((yearData) => (
+            <section class="grid gap-6 py-6 md:grid-cols-[minmax(140px,0.22fr)_1fr] md:gap-8">
+              <div>
+                <h3 class="font-heading text-4xl font-black leading-none text-secondary">{yearData.year}</h3>
+                <p class="mt-3 text-sm leading-relaxed text-text-muted">{copy.recipientsLabel(yearData.recipients.length)}</p>
+              </div>
+
+              <div class="grid gap-4 sm:grid-cols-2">
+                {yearData.recipients.map((winner) => (
+                  <article class="border-t border-border/55 pt-4">
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <h4 class="font-heading text-xl font-black leading-[0.94] text-secondary">{winner.name}</h4>
+                        <p class="mt-2 text-sm leading-relaxed text-text-secondary">{getAwardLabel(locale, winner.award)}</p>
+                        {winner.school && <p class="mt-1 text-sm leading-relaxed text-text-muted">{winner.school}</p>}
+                      </div>
+                      <span class="shrink-0 font-heading text-2xl font-black leading-none text-primary">{winner.amount}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <div class="mt-8 border-t border-border/70 pt-5">
+          <p class="max-w-3xl text-sm leading-relaxed text-text-muted">{copy.archiveNote}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden bg-surface-dark py-section text-text-inverse">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,182,130,0.12),transparent_22%),radial-gradient(circle_at_82%_18%,rgba(194,42,55,0.18),transparent_20%)]"></div>
+    <div class="page-container relative">
+      <div class="mx-auto max-w-6xl grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
+        <div>
+          <h2 class="font-heading text-4xl font-black uppercase leading-[0.9] text-text-inverse md:text-5xl">{copy.ctaTitle}</h2>
+        </div>
+
+        <div>
+          <p class="max-w-2xl text-base leading-relaxed text-text-inverse/72">{copy.ctaBody}</p>
+
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+            <a href={getLocalizedPath(locale, 'submit')} class="btn-accent">{copy.ctaPrimary}</a>
+            <a href={getLocalizedPath(locale, 'rules')} class="btn-secondary !border-text-inverse/18 !bg-transparent !text-text-inverse hover:!border-text-inverse hover:!bg-text-inverse hover:!text-surface-dark">
+              {copy.ctaSecondary} <ArrowRight class="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

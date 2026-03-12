@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getAlternatePath, getAlternateLocale, getAssetPath, getLocaleFromPath, getLocalizedPath, getRouteFromPath, siteMetadata } from '../i18n/site';
+import type { Locale, NavKey, RouteKey } from '../i18n/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  locale?: Locale;
+  routeKey?: RouteKey;
+  activeNavKey?: NavKey;
+}
+
+const { title, description, locale, routeKey, activeNavKey } = Astro.props;
+const resolvedLocale = locale ?? getLocaleFromPath(Astro.url.pathname);
+const resolvedRouteKey = routeKey ?? getRouteFromPath(Astro.url.pathname);
+const resolvedActiveNavKey =
+  activeNavKey ?? (resolvedRouteKey === 'kerstan' || resolvedRouteKey === 'woodhams' || resolvedRouteKey === 'artSparrow' ? 'scholarships' : undefined);
+const metadata = siteMetadata[resolvedLocale];
+const pageDescription = description ?? metadata.defaultDescription;
+const alternateLocale = getAlternateLocale(resolvedLocale);
+const alternatePath = getAlternatePath(resolvedLocale, resolvedRouteKey);
+const defaultPath = getLocalizedPath('en', resolvedRouteKey);
+const pageTitle = `${title} | ${metadata.siteName}`;
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
+const shouldIndexSite = import.meta.env.PUBLIC_SITE_INDEXABLE === 'true';
+---
+
+<!doctype html>
+<html lang={resolvedLocale}>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" sizes="16x16" href={getAssetPath('favicon-16x16.png')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={getAssetPath('favicon-32x32.png')} />
+    <link rel="icon" type="image/svg+xml" href={getAssetPath('favicon.svg')} />
+    <link rel="shortcut icon" href={getAssetPath('favicon.ico')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={getAssetPath('apple-touch-icon.png')} />
+    <link rel="manifest" href={getAssetPath('site.webmanifest')} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fcfaf7" />
+    <meta name="description" content={pageDescription} />
+    {!shouldIndexSite && <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />}
+    {!shouldIndexSite && <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta name="generator" content={Astro.generator} />
+    <link rel="alternate" hreflang={alternateLocale} href={alternatePath} />
+    <link rel="alternate" hreflang="x-default" href={defaultPath} />
+    <script is:inline>
+      (() => {
+        const storageKey = 'mensa-theme';
+        const root = document.documentElement;
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        const applyTheme = (theme) => {
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+          metaTheme?.setAttribute('content', theme === 'dark' ? '#08111c' : '#fcfaf7');
+        };
+
+        try {
+          const storedTheme = localStorage.getItem(storageKey);
+          const resolvedTheme = storedTheme === 'light' || storedTheme === 'dark'
+            ? storedTheme
+            : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+          applyTheme(resolvedTheme);
+        } catch {
+          applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        }
+      })();
+    </script>
+    <title>{pageTitle}</title>
+  </head>
+  <body class="min-h-screen flex flex-col bg-surface text-text-primary">
+    <Header locale={resolvedLocale} currentRoute={resolvedRouteKey} activeNavKey={resolvedActiveNavKey} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={resolvedLocale} showCta={resolvedRouteKey === 'home'} />
+  </body>
+</html>
+

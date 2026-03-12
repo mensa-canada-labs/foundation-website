@@ -1,0 +1,200 @@
+---
+import { ExternalLink } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'À propos',
+        description:
+          'Découvrez le Programme de bourses Mensa Canada, bras caritatif de Mensa Canada, et la manière dont il prolonge sa mission auprès des étudiants canadiens.',
+        kicker: 'Mensa Canada',
+        heroTitle: 'Mensa Canada et son programme de bourses',
+        heroSubtitle:
+          'Le Programme de bourses Mensa Canada, ou MCSP, est le bras caritatif de Mensa Canada. Depuis 1990, plus de 100 000 $ en bourses ont été accordés à des étudiants canadiens grâce aux dons, aux legs et au soutien continu des donateurs.',
+        highlights: [
+          { value: '100 000 $+', label: 'Attribués depuis 1990' },
+          { value: 'MCSP', label: 'Bras caritatif de Mensa Canada' },
+          { value: '250 mots', label: 'Format central de candidature' },
+        ],
+        programmeKicker: 'MCSP',
+        programmeTitle: 'Le programme de bourses, bras caritatif de Mensa Canada',
+        programmeSubtitle:
+          'Le MCSP permet à Mensa Canada d’appuyer sa mission par une aide concrète aux étudiants postsecondaires canadiens.',
+        programmeParagraphs: [
+          'Les montants remis varient selon les fonds disponibles, généralement de 1 000 $ à 2 500 $. Les bourses ont soutenu des étudiants dans un large éventail de domaines, notamment le génie, les arts, les sciences sociales, la médecine, les mathématiques, l’informatique et les métiers spécialisés.',
+          'Le financement provient principalement des dons de membres de Mensa, auxquels s’ajoutent des contributions marquantes des familles Sparrow, Kerstan et Woodhams, ainsi que des dons du public. Cette structure explique pourquoi l’histoire des bourses fait partie intégrante de l’identité du programme.',
+          'Il n’est pas nécessaire d’être membre de Mensa pour postuler. L’admissibilité demeure volontairement simple à comprendre : le programme s’adresse aux citoyens canadiens ou immigrants reçus âgés d’au moins 18 ans, inscrits à temps plein dans un établissement postsecondaire canadien.',
+        ],
+        programmeFieldsTitle: 'Parcours déjà soutenus',
+        programmeFields: ['Génie', 'Arts', 'Sciences sociales', 'Médecine', 'Mathématiques', 'Informatique', 'Métiers spécialisés'],
+        programmeImageAlt: 'Étudiante travaillant à un bureau avec des notes et un ordinateur',
+        mensaKicker: 'Mensa Canada',
+        mensaTitle: 'La mission plus large de Mensa Canada',
+        mensaSubtitle:
+          'Mensa Canada est l’organisation nationale canadienne de Mensa. Elle réunit des personnes dont les résultats se situent au 98e percentile ou plus et développe une communauté fondée sur la curiosité, l’échange intellectuel et le développement du potentiel humain.',
+        mensaParagraphs: [
+          'L’objectif général de Mensa Canada n’est pas seulement de regrouper ses membres, mais aussi de valoriser l’intelligence humaine, de favoriser les échanges intellectuels et d’encourager le développement du potentiel. Le programme de bourses s’inscrit naturellement dans cette perspective.',
+          'Le MCSP constitue ainsi une expression concrète et ouverte de cette mission. Par lui, Mensa Canada soutient des étudiants postsecondaires canadiens, reconnaît leur ambition et contribue à leurs parcours d’apprentissage au moyen d’un appui financier réel.',
+        ],
+        mensaImageAlt: 'Adultes réunis pour une discussion en groupe',
+        contactTitle: 'Coordonnées Mensa Canada',
+        contactLines: ['P.O. Box 1570', 'Kingston, ON K7L 5C8', 'info@mensacanada.org'],
+        ctaTitle: 'En savoir plus sur Mensa Canada',
+        ctaBody:
+          'Pour situer davantage le programme dans l’ensemble de l’organisation, vous pouvez consulter le site de Mensa Canada.',
+        primary: 'En savoir plus sur Mensa Canada',
+      }
+    : {
+        title: 'About',
+        description:
+          'Learn how the Mensa Canada Scholarship Programme serves as Mensa Canada’s charitable arm and extends its mission in support of Canadian students.',
+        kicker: 'Mensa Canada',
+        heroTitle: 'Mensa Canada and the Scholarship Programme',
+        heroSubtitle:
+          'The Mensa Canada Scholarship Programme, or MCSP, is Mensa Canada’s charitable arm. Since 1990, more than $100,000 in scholarships have been awarded to Canadian students through donations, family legacies, and sustained donor support.',
+        highlights: [
+          { value: '$100K+', label: 'Granted since 1990' },
+          { value: 'MCSP', label: 'Mensa Canada charitable arm' },
+          { value: '250 words', label: 'Core application format' },
+        ],
+        programmeKicker: 'MCSP',
+        programmeTitle: 'The scholarship programme as Mensa Canada’s charitable arm',
+        programmeSubtitle:
+          'MCSP allows Mensa Canada to support its mission through direct, practical help for Canadian post-secondary students.',
+        programmeParagraphs: [
+          'Awards range from $1,000 to $2,500 as funding permits. Scholarships have supported students across engineering, art, social sciences, medicine, mathematics, computer science, and skilled trades.',
+          'Funding comes primarily from Mensan donations, alongside major contributions from the Sparrow, Kerstan, and Woodhams families, as well as gifts from the public. That is why the history of individual scholarships is part of the programme’s identity, not just background detail.',
+          'Applicants do not need to be Mensa members. Eligibility is intentionally straightforward: the programme is open to Canadian citizens or landed immigrants aged 18 or older who are enrolled full-time at a Canadian post-secondary institution.',
+        ],
+        programmeFieldsTitle: 'Fields already supported',
+        programmeFields: ['Engineering', 'Art', 'Social sciences', 'Medicine', 'Mathematics', 'Computer science', 'Skilled trades'],
+        programmeImageAlt: 'Student working at a desk with notes and a laptop',
+        mensaKicker: 'Mensa Canada',
+        mensaTitle: 'Mensa Canada’s broader mission',
+        mensaSubtitle:
+          'Mensa Canada is the national Canadian branch of Mensa. It brings together people whose scores place them at or above the 98th percentile and builds a community around curiosity, intellectual exchange, and the development of human potential.',
+        mensaParagraphs: [
+          'Mensa Canada’s purpose is not only to bring members together, but also to value human intelligence, encourage intellectual exchange, and support the development of potential. The scholarship programme fits naturally within that purpose.',
+          'MCSP is one of the clearest public expressions of that mission. Through it, Mensa Canada supports Canadian post-secondary students, recognizes ambition, and contributes to educational paths through real financial assistance.',
+        ],
+        mensaImageAlt: 'Adults gathered for a group discussion',
+        contactTitle: 'Mensa Canada contact',
+        contactLines: ['P.O. Box 1570', 'Kingston, ON K7L 5C8', 'info@mensacanada.org'],
+        ctaTitle: 'Learn more about Mensa Canada',
+        ctaBody:
+          'If you want broader context on the organization behind the programme, you can visit the Mensa Canada site.',
+        primary: 'Learn more about Mensa Canada',
+      };
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="about">
+  <section class="page-hero">
+    <div class="page-container relative">
+      <div class="max-w-4xl">
+        <p class="section-kicker">{copy.kicker}</p>
+        <h1 class="page-hero-title !mb-5 text-left">{copy.heroTitle}</h1>
+        <p class="max-w-3xl text-lg font-medium leading-[1.45] text-text-inverse/74 md:text-xl">{copy.heroSubtitle}</p>
+      </div>
+
+      <div class="mt-10 grid gap-5 border-t border-text-inverse/12 pt-6 md:grid-cols-3 md:gap-8">
+        {copy.highlights.map((item) => (
+          <div class="border-l border-text-inverse/12 pl-4 first:border-l-0 first:pl-0 md:pl-6 md:first:pl-0">
+            <div class="font-heading text-3xl font-black leading-none text-accent md:text-4xl">{item.value}</div>
+            <p class="mt-3 font-heading text-[0.78rem] font-bold uppercase tracking-[0.1em] text-text-inverse/70">{item.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] lg:items-center">
+        <div class="overflow-hidden border border-border/80 shadow-card">
+          <img
+            src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1600&q=80"
+            alt={copy.programmeImageAlt}
+            class="w-full h-auto"
+          />
+        </div>
+
+        <div>
+          <p class="section-kicker">{copy.programmeKicker}</p>
+          <h2 class="section-title">{copy.programmeTitle}</h2>
+          <p class="section-subtitle">{copy.programmeSubtitle}</p>
+
+          <div class="mt-8 space-y-5 text-base leading-relaxed text-text-secondary md:text-lg">
+            {copy.programmeParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+
+          <div class="mt-8 border-t border-border/70 pt-6">
+            <p class="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-primary">{copy.programmeFieldsTitle}</p>
+            <div class="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+              {copy.programmeFields.map((field) => (
+                <div class="border-b border-border/60 pb-3 text-sm font-semibold uppercase tracking-[0.08em] text-text-secondary">
+                  {field}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface-cool">
+    <div class="page-container">
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] lg:items-center">
+        <div class="order-2 lg:order-1">
+          <p class="section-kicker !bg-accent !text-surface-dark">{copy.mensaKicker}</p>
+          <h2 class="section-title">{copy.mensaTitle}</h2>
+          <p class="section-subtitle">{copy.mensaSubtitle}</p>
+
+          <div class="mt-8 space-y-5 text-base leading-relaxed text-text-secondary md:text-lg">
+            {copy.mensaParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+        </div>
+
+        <div class="order-1 lg:order-2">
+          <div class="overflow-hidden border border-border/80 shadow-card">
+            <img
+              src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80"
+              alt={copy.mensaImageAlt}
+              class="aspect-[4/3] w-full object-cover"
+            />
+          </div>
+
+          <div class="mt-5 border-t border-border/70 pt-5">
+            <p class="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-primary">{copy.contactTitle}</p>
+            <div class="mt-4 space-y-2 text-sm font-medium leading-relaxed text-text-secondary">
+              {copy.contactLines.map((line) => <p>{line}</p>)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface-warm">
+    <div class="page-container">
+      <div class="grid gap-6 border-t border-border/70 pt-8 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div class="max-w-3xl">
+          <h2 class="font-heading text-3xl font-bold leading-none text-secondary md:text-4xl">{copy.ctaTitle}</h2>
+          <p class="mt-4 max-w-2xl text-base leading-relaxed text-text-secondary">{copy.ctaBody}</p>
+        </div>
+
+        <a href="https://mensa.ca/" target="_blank" rel="noopener noreferrer" class="editorial-link">
+          {copy.primary} <ExternalLink class="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

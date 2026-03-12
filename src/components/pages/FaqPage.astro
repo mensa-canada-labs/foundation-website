@@ -1,0 +1,448 @@
+---
+import { ArrowRight, ChevronDown, Mail } from 'lucide-astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath } from '../../i18n/site';
+import type { Locale } from '../../i18n/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy =
+  locale === 'fr'
+    ? {
+        title: 'FAQ',
+        description:
+          'Consultez les questions fréquentes du Programme de bourses Mensa Canada sur l’admissibilité, la dissertation de 250 mots et la soumission de votre candidature.',
+        heroTitle: 'Questions fréquentes',
+        heroSubtitle:
+          'Les réponses les plus utiles, organisées pour aller vite. Commencez par l’essentiel, puis entrez dans le détail si nécessaire.',
+        quickTitle: 'Réponses rapides',
+        quickBody:
+          'Les trois points ci-dessous répondent déjà à une grande partie des questions reçues chaque année.',
+        quickAnswers: [
+          { value: 'NON', label: 'Vous n’avez pas besoin d’être membre de Mensa pour poser votre candidature.' },
+          { value: '250', label: 'La dissertation doit tenir en 250 mots maximum.' },
+          { value: '31 JANV.', label: 'La période annuelle de soumission se termine le 31 janvier.' },
+        ],
+        navTitle: 'Aller directement à',
+        moreQuestions: 'Autres questions dans cette section',
+        contactTitle: 'Vous ne trouvez pas votre réponse ?',
+        contactBody: 'Nous pouvons vous aider pour toute question liée au concours et à la soumission.',
+        contactLink: 'Écrivez-nous',
+        ctaTitle: 'Quand tout est clair, passez à la soumission',
+        ctaBody: 'Vous pouvez maintenant relire les règlements ou soumettre directement votre dissertation de 250 mots.',
+        ctaPrimary: 'Soumettre votre dissertation',
+        ctaSecondary: 'Voir les règlements',
+        faqs: [
+          {
+            category: 'Admissibilité',
+            lead:
+              'Cette section répond surtout aux questions de statut, d’âge, d’établissement et de charge d’études. Si vous hésitez sur votre admissibilité, commencez ici.',
+            items: [
+              {
+                q: 'Dois-je être membre de Mensa ?',
+                a: 'Non. Vous n’avez pas besoin d’être membre de Mensa pour présenter votre candidature.',
+              },
+              {
+                q: 'Je suis actuellement en 12e année ou je prends une année sabbatique. Puis-je poser ma candidature ?',
+                a: 'Non. Les bourses s’adressent uniquement aux personnes qui fréquentent un collège ou une université pendant l’année scolaire en cours.',
+              },
+              {
+                q: 'Que se passe-t-il si j’ai 18 ans quelques jours après le 31 janvier ?',
+                a: 'Vous serez disqualifié. Veuillez présenter votre candidature au concours de l’année prochaine.',
+              },
+              {
+                q: 'Que se passe-t-il si je suis citoyen canadien inscrit dans un établissement à l’étranger ?',
+                a: 'Vous devez fréquenter un établissement postsecondaire canadien. L’exception s’applique si vous êtes inscrit dans un établissement canadien, étudiez temporairement à l’étranger et recevez des crédits à votre établissement canadien.',
+              },
+              {
+                q: 'Que se passe-t-il si je réside au Canada sans être citoyen ni immigrant reçu ?',
+                a: 'Vous serez disqualifié. Le concours est réservé aux citoyens canadiens ou aux immigrants reçus.',
+              },
+              {
+                q: 'Suis-je admissible si je fréquente un cégep ?',
+                a: 'Oui. Les étudiants du Québec inscrits au cégep sont admissibles si leurs études sont à temps plein.',
+              },
+              {
+                q: 'Je suis en programme coopératif et actuellement en stage. Suis-je admissible ?',
+                a: 'Oui, à condition que votre établissement vous accorde des crédits scolaires pour votre stage.',
+              },
+              {
+                q: 'Le concours s’adresse-t-il seulement aux étudiants de premier cycle ?',
+                a: 'Non. Le concours est ouvert à tout étudiant postsecondaire qui répond aux critères, que ce soit au premier cycle, aux cycles supérieurs ou au postdoctorat.',
+              },
+              {
+                q: 'Que signifie « temps plein » ?',
+                a: 'Le statut à temps plein est défini par l’établissement postsecondaire canadien que vous fréquentez.',
+              },
+            ],
+          },
+          {
+            category: 'Dissertation et soumission',
+            lead:
+              'Ici, l’enjeu principal est la forme du texte: anonymat, nombre de mots, exactitude des affirmations et manière de soumettre correctement.',
+            items: [
+              {
+                q: 'Puis-je utiliser le mot « je » ? N’est-ce pas révélateur de mon identité ?',
+                a: 'L’utilisation du mot « je » ne révèle pas votre identité et n’entraînera pas la disqualification de votre dissertation. Évitez toutefois d’y inclure votre nom, des liens vers vos profils en ligne ou toute information permettant aux juges de vous identifier facilement.',
+              },
+              {
+                q: 'Nommer mon établissement, ma ville, mon genre ou ma culture est-il considéré comme une information permettant de m’identifier ?',
+                a: 'Non. Ces renseignements ne suffisent pas à vous identifier précisément. Votre dissertation ne doit pas contenir votre nom, de liens vers vos profils en ligne ou d’autres éléments qui permettraient aux juges de vous reconnaître facilement.',
+              },
+              {
+                q: 'Les contractions comme « j’ai » comptent-elles comme un mot ou deux ?',
+                a: 'Les contractions et les mots avec apostrophe comptent comme un seul mot.',
+              },
+              {
+                q: 'Les mots composés comptent-ils comme un mot ou deux ?',
+                a: 'Les mots reliés par un trait d’union comptent comme un seul mot.',
+              },
+              {
+                q: 'Les titres, citations ou notes de bas de page comptent-ils dans le total de mots ?',
+                a: 'Oui. Tous les mots comptent dans votre limite de 250 mots, y compris des formules comme « À qui de droit » ou « Merci de votre considération ».',
+              },
+              {
+                q: 'La dissertation doit-elle être factuelle ?',
+                a: 'Oui. Il s’agit d’une demande de bourse. Nous vérifions toutes les affirmations contenues dans les dissertations finalistes. Si une affirmation est fausse ou impossible à vérifier, la dissertation est retirée du concours.',
+              },
+              {
+                q: 'Comment puis-je inclure tout cela en seulement 250 mots ?',
+                a: 'Consultez la page des gagnants pour lire des dissertations gagnantes des années précédentes. Vous verrez comment les candidats ont structuré un texte concis et complet.',
+              },
+            ],
+          },
+          {
+            category: 'Processus et échéancier',
+            lead:
+              'Cette section couvre le calendrier annuel, le traitement des candidatures et ce à quoi vous devez vous attendre après l’envoi du formulaire.',
+            items: [
+              {
+                q: 'Quand le concours ouvre-t-il et quand se termine-t-il ?',
+                a: 'Le concours se déroule chaque année du 1er septembre au 31 janvier à minuit dans votre fuseau horaire. Les candidatures soumises hors de cette période ne sont pas acceptées.',
+              },
+              {
+                q: 'Comment poser ma candidature à la bourse Edgar Kerstan ?',
+                a: 'Il n’y a pas de demande distincte pour la bourse Edgar Kerstan. Vous devez d’abord être sélectionné comme finaliste du concours général pour être considéré. Seule la bourse Woodhams comporte un critère spécifique lié au domaine d’études.',
+              },
+              {
+                q: 'Dois-je envoyer des références ou des documents maintenant ?',
+                a: 'Non. Ces pièces ne seront demandées qu’aux personnes désignées finalistes.',
+              },
+              {
+                q: 'Quelle correspondance recevrai-je après ma soumission ?',
+                a: 'Seuls les finalistes ou gagnants seront contactés. Ne soumettez pas votre dissertation plus d’une fois et n’écrivez pas pour vérifier sa réception. À moins de recevoir un message « courriel non distribuable » dans les 2 à 3 minutes, votre soumission a bien été reçue.',
+              },
+            ],
+          },
+        ],
+      }
+    : {
+        title: 'Frequently Asked Questions',
+        description:
+          'Read the Mensa Canada Scholarship Programme FAQ covering eligibility, the 250-word essay, and the application process.',
+        heroTitle: 'Frequently Asked Questions',
+        heroSubtitle:
+          'The answers you are most likely to need, organized for speed. Start with the essentials, then go deeper only if you need to.',
+        quickTitle: 'Quick answers',
+        quickBody:
+          'These three points already answer a large share of the questions we receive each year.',
+        quickAnswers: [
+          { value: 'NO', label: 'You do not need to be a Mensa member to apply.' },
+          { value: '250', label: 'The essay must stay within 250 words.' },
+          { value: 'JAN 31', label: 'The annual submission period ends on January 31.' },
+        ],
+        navTitle: 'Jump to',
+        moreQuestions: 'More questions in this section',
+        contactTitle: 'Still missing an answer?',
+        contactBody: 'We can help with any question related to the competition and submission process.',
+        contactLink: 'Email us',
+        ctaTitle: 'When everything is clear, move to submission',
+        ctaBody: 'You can now review the rules one last time or go straight to submitting your 250-word essay.',
+        ctaPrimary: 'Submit Your Essay',
+        ctaSecondary: 'Review Rules',
+        faqs: [
+          {
+            category: 'Eligibility',
+            lead:
+              'This section deals with status, age, institution, and course load. If you are unsure whether you qualify, start here.',
+            items: [
+              {
+                q: 'Do I have to be a member of Mensa?',
+                a: 'No. You do not need to be a member of Mensa in order to apply.',
+              },
+              {
+                q: 'I am currently in grade 12, or I am taking a gap year. Can I apply?',
+                a: 'No. The scholarships are intended only for individuals who are attending college or university during the current academic year.',
+              },
+              {
+                q: 'What if my 18th birthday falls a few days after January 31?',
+                a: 'You will be disqualified. Please apply for the next year’s competition.',
+              },
+              {
+                q: 'What if I am a Canadian citizen enrolled abroad?',
+                a: 'You must be attending a Canadian post-secondary institution. The exception is if you are registered at a Canadian institution, attending studies abroad, and receiving credit at your Canadian school.',
+              },
+              {
+                q: 'What if I am a resident in Canada but not a landed immigrant or citizen?',
+                a: 'You will be disqualified. The competition is open to Canadian citizens or landed immigrants only.',
+              },
+              {
+                q: 'Am I eligible if I am attending CEGEP?',
+                a: 'Yes. Quebec students attending CEGEP are eligible if their studies are full-time.',
+              },
+              {
+                q: 'I am a co-op student currently on a work term. Do I qualify?',
+                a: 'Yes, as long as your educational institution gives you academic credit for your work term.',
+              },
+              {
+                q: 'Is the competition for undergraduates only?',
+                a: 'No. The competition is open to any post-secondary student who meets our criteria, including undergraduate, graduate, and post-graduate students.',
+              },
+              {
+                q: 'What do you mean by “full-time”?',
+                a: 'Full-time is defined by the Canadian post-secondary institution that you are attending.',
+              },
+            ],
+          },
+          {
+            category: 'Essay & Submission',
+            lead:
+              'The main issues here are essay format: anonymity, word count, factual accuracy, and the correct way to submit.',
+            items: [
+              {
+                q: 'Can I use the word “I”? Doesn’t it identify me?',
+                a: 'The use of “I” does not identify you and will not disqualify your essay. Avoid including your name, links to your online profile, or any information that would allow judges to identify you easily.',
+              },
+              {
+                q: 'Is naming my school, town, gender, or culture considered identifying information?',
+                a: 'No. None of these identify you specifically. Your essay should not contain your name, links to your online profile, or any information that allows judges to identify you easily as the author.',
+              },
+              {
+                q: 'Do contractions like “don’t” count as one word or two?',
+                a: 'Contractions and words with apostrophes count as one word.',
+              },
+              {
+                q: 'Do hyphenated phrases count as one word or two?',
+                a: 'Hyphenated words count as one word.',
+              },
+              {
+                q: 'Do titles, quotations, or footnotes count in my word total?',
+                a: 'Yes. All words count as part of your 250 words, including greetings and closings.',
+              },
+              {
+                q: 'Does the essay have to be factual?',
+                a: 'Yes. This is a scholarship application. We verify claims made in finalist essays. If anything is false or not verifiable, the essay is removed from consideration.',
+              },
+              {
+                q: 'How can I include all that information in only 250 words?',
+                a: 'Visit our Winners page where you can read past winning essays for inspiration on how previous winners covered everything within the word limit.',
+              },
+            ],
+          },
+          {
+            category: 'Process & Timeline',
+            lead:
+              'This section covers the annual cycle, what happens after submission, and when you should expect to hear back.',
+            items: [
+              {
+                q: 'When does the competition open and close?',
+                a: 'The competition runs annually from September 1 to January 31 at midnight in your time zone. Applications outside this period are not accepted.',
+              },
+              {
+                q: 'How do I apply for the Edgar Kerstan Award?',
+                a: 'You do not apply specifically for the Kerstan award. You must first be named a finalist in the general competition to be considered. Only the Woodhams award has a specific field-of-study requirement.',
+              },
+              {
+                q: 'Do I need to send references or supporting documents now?',
+                a: 'No. Those items are requested only from applicants who are selected as finalists.',
+              },
+              {
+                q: 'What correspondence can I expect after submission?',
+                a: 'Only finalists and winners will be contacted. Please do not submit more than once or email to ask whether your essay was received. Unless you receive a “Mail Undeliverable” reply within 2 to 3 minutes, your submission was successful.',
+              },
+            ],
+          },
+        ],
+      };
+
+const categoryVisuals =
+  locale === 'fr'
+    ? [
+        {
+          src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80',
+          alt: 'Étudiants marchant et échangeant sur un campus',
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1600&q=80',
+          alt: 'Main en train d’écrire dans un carnet',
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80',
+          alt: 'Étudiants travaillant ensemble autour d’un ordinateur portable',
+        },
+      ]
+    : [
+        {
+          src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80',
+          alt: 'Students walking and talking on campus',
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1600&q=80',
+          alt: 'Hand writing in a notebook',
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80',
+          alt: 'Students working together around a laptop',
+        },
+      ];
+
+const faqSections = copy.faqs.map((section, index) => ({
+  ...section,
+  ...categoryVisuals[index],
+}));
+
+function toSectionId(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+---
+
+<Layout title={copy.title} description={copy.description} locale={locale} routeKey="faq">
+  <section class="page-hero">
+    <div class="page-container relative text-center">
+      <h1 class="page-hero-title">{copy.heroTitle}</h1>
+      <p class="page-hero-subtitle">{copy.heroSubtitle}</p>
+    </div>
+  </section>
+
+  <section class="py-section bg-surface">
+    <div class="page-container">
+      <div class="mx-auto max-w-6xl">
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-end">
+          <div>
+            <p class="section-kicker">{copy.quickTitle}</p>
+            <h2 class="section-title">{copy.quickTitle}</h2>
+            <p class="section-subtitle">{copy.quickBody}</p>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-3">
+            {copy.quickAnswers.map((item) => (
+              <div class="border-t border-border/70 pt-4">
+                <div class="font-heading text-3xl font-black leading-none text-primary">{item.value}</div>
+                <p class="mt-3 text-sm leading-relaxed text-text-secondary">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="mt-10 border-t border-border/70 pt-6">
+          <p class="mb-4 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-primary">{copy.navTitle}</p>
+          <div class="flex flex-wrap gap-3">
+            {faqSections.map((section) => (
+              <a
+                href={`#${toSectionId(section.category)}`}
+                class="inline-flex items-center rounded-full border border-border bg-surface-elevated px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-primary/25 hover:text-primary"
+              >
+                {section.category}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {faqSections.map((section, index) => {
+    const featuredItems = section.items.slice(0, 2);
+    const additionalItems = section.items.slice(2);
+    const imageBlock = (
+      <div class="overflow-hidden border border-border/80 shadow-card">
+        <img
+          src={section.src}
+          alt={section.alt}
+          class="aspect-[4/5] w-full object-cover sm:aspect-[16/10] lg:aspect-[4/5]"
+        />
+      </div>
+    );
+
+    return (
+      <section id={toSectionId(section.category)} class:list={[index % 2 === 0 ? 'bg-surface-cool' : 'bg-surface', 'py-section']}>
+        <div class="page-container">
+          <div class="mx-auto max-w-6xl grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start">
+            {index % 2 === 0 ? imageBlock : null}
+
+            <div class:list={[index % 2 === 1 && 'lg:order-1']}>
+              <p class="section-kicker">{section.category}</p>
+              <h2 class="section-title">{section.category}</h2>
+              <p class="section-subtitle">{section.lead}</p>
+
+              <div class="mt-10 space-y-8">
+                {featuredItems.map((faq) => (
+                  <article class="border-t border-border/70 pt-5 first:border-t-0 first:pt-0">
+                    <h3 class="font-heading text-[1.9rem] leading-[0.94] text-secondary">{faq.q}</h3>
+                    <p class="mt-4 max-w-3xl text-base leading-relaxed text-text-secondary md:text-lg">{faq.a}</p>
+                  </article>
+                ))}
+              </div>
+
+              {additionalItems.length > 0 && (
+                <div class="mt-10 border-t border-border/70 pt-6">
+                  <p class="mb-4 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-primary">{copy.moreQuestions}</p>
+                  <div class="space-y-3">
+                    {additionalItems.map((faq) => (
+                      <details class="outlined-panel group hover:border-primary/20 transition-colors">
+                        <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer list-none font-medium text-text-primary hover:text-primary transition-colors [&::-webkit-details-marker]:hidden">
+                          <span>{faq.q}</span>
+                          <ChevronDown class="w-5 h-5 text-text-muted shrink-0 transition-transform duration-200 group-open:rotate-180" />
+                        </summary>
+                        <div class="border-t border-border/50 px-5 pb-5 pt-4 text-text-secondary leading-relaxed">{faq.a}</div>
+                      </details>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {index % 2 === 1 ? <div class="lg:order-2">{imageBlock}</div> : null}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  <section class="relative overflow-hidden bg-surface-dark py-section text-text-inverse">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,182,130,0.12),transparent_22%),radial-gradient(circle_at_82%_18%,rgba(194,42,55,0.18),transparent_20%)]"></div>
+    <div class="page-container relative">
+      <div class="mx-auto max-w-6xl grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div>
+          <h2 class="font-heading text-4xl font-black uppercase leading-[0.9] text-text-inverse md:text-5xl">{copy.contactTitle}</h2>
+          <p class="mt-4 max-w-2xl text-base leading-relaxed text-text-inverse/72">{copy.contactBody}</p>
+          <a href="mailto:question@mensacanada.ca" class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-accent underline underline-offset-4">
+            <Mail class="h-4 w-4" />
+            {copy.contactLink}
+          </a>
+        </div>
+
+        <div>
+          <h3 class="font-heading text-3xl font-black uppercase leading-[0.92] text-text-inverse md:text-4xl">{copy.ctaTitle}</h3>
+          <p class="mt-4 max-w-2xl text-base leading-relaxed text-text-inverse/68">{copy.ctaBody}</p>
+
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+            <a href={getLocalizedPath(locale, 'submit')} class="btn-accent">{copy.ctaPrimary}</a>
+            <a href={getLocalizedPath(locale, 'rules')} class="btn-secondary !border-text-inverse/18 !bg-transparent !text-text-inverse hover:!border-text-inverse hover:!bg-text-inverse hover:!text-surface-dark">
+              {copy.ctaSecondary} <ArrowRight class="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
