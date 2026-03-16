@@ -7,7 +7,7 @@ const shouldIndexSite = import.meta.env.PUBLIC_SITE_INDEXABLE === 'true';
 export const GET: APIRoute = () => {
   const lines = shouldIndexSite
     ? ['User-agent: *', 'Allow: /']
-    : ['User-agent: *', 'Allow: /', '', '# Staging and preview builds rely on page-level noindex directives.'];
+    : ['User-agent: *', 'Disallow: /'];
 
   return new Response(lines.join('\n'), {
     headers: {
